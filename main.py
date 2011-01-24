@@ -1,35 +1,10 @@
-## APPSPOT.COM - UNCOMMENT FOR PRODUCTION ####################################
-#FACEBOOK_APP_ID = "112884208756371"
-#FACEBOOK_APP_SECRET = "9091225114bdb7017e6b3c23a09cfb38"
-#SITE="Greenbean.me"
-##############################################################################
+#
+# Copyright 2010 SuperKablamo, LLC
+# info@superkablamo.com
+#
 
-## LOCALHOST:8080 - UNCOMMENT FOR LOCAL TESTING ##############################
-#FACEBOOK_APP_ID = "174331539272451"
-#FACEBOOK_APP_SECRET = "f4f8e3762a2abbe62dee8bf44a4967a4"
-#SITE="localhosttest-sk"
-##############################################################################
-
-## SAM LOCALHOST:8096 - UNCOMMENT FOR LOCAL TESTING ##########################
-#app name - coolbeans-local
-#FACEBOOK_APP_ID = "13641208923"
-#FACEBOOK_APP_SECRET = "71e4b7fea11728cd8e0c022801b278b1"
-#SITE="mymicrodonations"
-##############################################################################
-
-## SAM Live - UNCOMMENT FOR Live TESTING #####################################
-#app name = sampyxisstockwatcher
-FACEBOOK_APP_ID = "157819884231043"
-FACEBOOK_APP_SECRET = "7142daa5ac2753ac6b06f70855830a9a"
-SITE="gbsamtest"
-##############################################################################
-
-CATS=["Reduce","Reuse","Recycle","Organic","Wind","Solar",
-      "Walk","Bus","Bike","Local","Carpool"]
-      
-ERROR_PAGE = "base_404.html"      
-
-DEBUG = True
+############################# IMPORTS ########################################
+############################################################################## 
 
 import base64
 import cgi
@@ -46,6 +21,7 @@ import models
 import facebook
 import re
 
+from settings import *
 from django.utils import simplejson as json
 from google.appengine.ext import db
 from google.appengine.ext import webapp
@@ -53,6 +29,7 @@ from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 
 ############################# REQUEST HANDLERS ###############################    
+############################################################################## 
 class MainHandler(webapp.RequestHandler):
     """Provides access to the active Facebook user in self.current_user
 
@@ -303,6 +280,7 @@ class Page(MainHandler):
                       'facebook_app_id':FACEBOOK_APP_ID})        
 
 ############################### METHODS ######################################
+############################################################################## 
 def getUser(graph, cookie):
     """Returns a User model, built from the Facebook Graph API data.  Also, 
     a UserBean and LocationBean entity is created or updated to ensure 
@@ -415,9 +393,9 @@ def isSpam(user_fb_id):
         return False
     else:
         return True
+        
 ##############################################################################
-
-
+############################################################################## 
 def main():
     util.run_wsgi_app(webapp.WSGIApplication([(r'/page/(.*)', Page),
                                               (r'/user/(.*)', UserProfile),
@@ -427,5 +405,6 @@ def main():
                                               (r'/.*', BaseHandler)],
                                               debug=DEBUG))
 ##############################################################################
+############################################################################## 
 if __name__ == "__main__":
     main()
