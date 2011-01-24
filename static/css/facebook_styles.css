@@ -1,0 +1,73 @@
+/*RESET*/
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, small, fieldset, form, label, legend { margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; vertical-align: baseline; background: transparent; }
+body { line-height: 1; }
+ol, ul { list-style: none; }
+blockquote, q { quotes: none; }
+blockquote:before, blockquote:after,q:before, q:after { content: ''; content: none; }
+:focus { outline: 0; }
+ins { text-decoration: none; }
+del { text-decoration: line-through; }
+table { border-collapse: collapse; border-spacing: 0; }
+
+/*TEXT STYLES*/
+body { font-family: Georgia,"Times New Roman",Times,serif; line-height: 1.4em; }
+a { color: #81290D; cursor: pointer; outline: medium none; text-decoration: none; }
+#brag-form h3, #sidebar h3 { color: #81290D; font-size: 16px; font-weight: normal; padding-bottom: 4px; }
+#mainbar .user-profile h2 { color: #81290D; font-size: 20px; font-weight: normal; text-transform: uppercase; }
+#brag-list .brag-vote a, .user-beans p { font-size: 12px; }
+#brag-list .brag-entry p, #sidebar p, #sidebar ul { font-size: 16px; padding-top: 8px; color: #636363; }
+#brag-list .brag-entry .brag-meta p, #sidebar p { text-align: left; font-size: 14px; }
+.user-beans p { text-align: center; line-height: 1em; color: #636363; }
+
+
+/*LAYOUT*/
+body { background-color: #eee9dc; }
+#container { width: 728px; height: 100%; }
+
+/*HEADER*/
+#header { width: 100%; }
+#logo { background-image: url("../images/logo.png"); width: 280px; height: 76px; margin-left: 224px; }
+#content-top { background: url("../images/content-top.png") no-repeat scroll center top transparent; width: 720px; height: 40px; }
+
+/*MAIN*/
+#content { max-height: 680px; }
+#content-middle { background: url("../images/content-mid.png") repeat-y scroll center top transparent; position: relative; width: 720px; float: left; }
+#bar-wrapper { margin-left: 24px; width: 100%; }
+
+/*MAINBAR*/
+#mainbar { width: 386px; float: left; padding-right: 28px; }
+
+.user-profile { height: 60px; }
+.user-profile .profile-image { float: left; }
+.user-profile .profile-image img { border: solid #c3c7bd 2px; }
+.user-profile .profile-name { margin-left: 8px; float: left; }
+.user-profile .user-beans { float: left; margin-left: 12px; }
+.user-profile .user-bean-count { float: left; font-size: 20px; -moz-border-radius: 20px; border: solid 0px #688b54; background-color: #688b54; color: white; margin: -4px 6px 0 10px; padding: 4px 8px 8px 8px;  }
+.user-profile .user-bean-text { float: right; }
+
+#brag-form { margin: 6px 0 18px 0; float: left; clear: both; }
+
+#text-box .text-area { border: 1px solid #c3c7bd; }
+#tag-list { }
+#tag-list ul, #tag-list li { display: inline; color: #636363; font-size: 12px; }
+#submit-button { float: right; }
+input.button { border: 1px solid #81290D; color: #81290D; font-weight: bold; }
+
+#brag-list { margin: 20px 0; clear:both; overflow: hidden; }
+#brag-list .brag-entry { float: left; overflow: hidden; padding: 10px 0; width: 100%; background: url("../images/entry-separator.png") no-repeat scroll left top transparent; }
+#brag-list .brag-vote { text-align: center; float: right; }
+
+.vote-count { font-size: 20px; -moz-border-radius: 20px; border: solid 0px #688b54; background-color: #688b54; color: white; margin-top: 4px; padding: 4px 8px 8px 8px; }
+.brag-entry .brag-message { }
+.brag-entry .brag-stats { }
+.brag-entry .brag-comments { }
+
+/*SIDEBAR*/
+#sidebar { width: 260px; float: left; }
+#start ul { list-style-image: url("../images/green-bullet.png"); margin-left: 20px;  }
+#start-button { width: 88px; height: 32px; float: right; margin-top: 10px; }
+
+
+/*FOOTER*/
+#footer { }
+#content-bottom { background: url("../images/content-bottom.png") no-repeat scroll center top transparent; width: 720px; height: 28px; float: left; }

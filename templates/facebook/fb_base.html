@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>{% block title %}Go Green, Earn Beans - Greenbean{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/facebook_styles.css">
+    <script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+		<script type="text/javascript">
+	  	$(function() {  
+	      $(".vote-form").submit(function() { 
+					var $thisForm = $(this);
+					var inputs =	$(this).find('input:hidden');
+					var key = $('input.brag', this).val();
+					$.ajax({  
+						type: "POST",  
+					  url: "/bean",  
+					  data: inputs,  
+					  success: function(data) {  
+							var $div = $('#' + key),
+							    intValue = parseInt($div.html(), 10);
+							$div.html(++intValue);
+							$('input.vote-button', $thisForm).hide();
+					  }  
+					});  
+					return false;
+	    	});  
+	   	});
+		</script>
+
+    </head>
+  <body>
+    <div id="container">
+
+    	<!-- HEADER --> 
+      <div id="header">
+				<div id="top">
+					<div id="top-left">
+						<div id="logo"><a href="/"><img src="/static/images/logo.png"/></a></div>
+					</div>
+					<div id="top-right">
+						<div id="login-wrap">
+							<div id="fb-login" style="visibility:hidden">
+								<div id="fb-button" style="visibility:hidden">
+									<fb:login-button autologoutlink="true" perms="publish_checkins,publish_stream"></fb:login-button>
+								</div>
+				    		{% if current_user %}
+				      	<div id="fb-profile">
+									<p>Hello, <a href="/user/{{current_user.fb_id}}">{{current_user.name}}</a></p>
+								</div>
+				    		{% endif %}
+							</div><!-- /fb-login -->
+					  </div><!-- /login-wrap -->
+						<!--
+						<div id="top-nav-wrap">
+							<div id="top-nav">
+								<ul>
+									<li><a href="/top/users">Top Users</a></li>
+									<li><a href="/top/locations">Top Locations</a></li>
+									<li><a href="/top/categories">Top Categories</a></li>								
+								</ul>
+							</div>		
+						</div> -->
+					</div>	
+				</div>		
+
+        <div id="content-top"></div>
+      </div>
+
+      <!-- MAIN CONTENT --> 
+      <div id="content">
+        <div id="content-middle">
+        	<div id="bar-wrapper">
+						{% block main %}
+						<div id="mainbar">
+							{% block top-content %}
+					    <!-- brag-list: container for list of Brags. --> 
+							<h1>Recent Green Updates</h1>
+							<p>Login with Facebook to earn and award greenbeans!  </p>
+						
+						{% endblock  %}
+							{% block brags %}
+				    	<div id="brag-list">
+				    		{% for brag in brags %}
+				  			<div class="brag-wrap">
+					  			<!-- user-profile: container for the user's avatar and name. -->
+					    		<div class="brag-user-profile">
+					    			<div class="profile-image">
+					      			<a href="{{ brag.user.fb_profile_url }}"><img src="http://graph.facebook.com/{{brag.user.fb_id }}/picture?type=square"/></a></p>
+					      		</div>
+					      		<div class="profile-name">
+					      			<h2>
+												<span class="name"><a href="/user/{{brag.user.fb_id}}">{{ brag.user.name|escape }}</a></span>
+												<!--<span class="beans-count"> ({{beans}})</span>-->
+											</h2>
+					      		</div>
+				    			</div>
+				    			<!-- brag-entry: container for a single Brag -->
+				      		<div class="brag-entry">
+										<div class="brag-vote">
+											<form class="vote-form" action="">
+				       					<div id="{{brag.key}}" class="vote-count">{{brag.beans}}</div>
+										  	{% if current_user.fb_id %}
+											  	{% if not current_user.fb_id|in_list:brag.voter_keys %}
+											  	<input class="vote-button" type="submit" class="text-button" value="vote+"/>
+											  	<input type="hidden" class="brag" name="brag" value="{{brag.key}}">
+											  	<input type="hidden" class="votee" name="votee" value="{{brag.user.fb_id}}">
+											  	<input type="hidden" class="voter" name="voter" value="{{current_user.fb_id}}">
+											  	{% endif %}
+												{% endif %}          	
+				       				</form>
+										</div>
+				       			<div class="brag-message">
+				       				<p>{{ brag.message|escape }}</p>
+				       			</div>          
+				       			<div class="brag-meta">
+				       				<p>{{brag.created|timesince}} ago 
+												{% if brag.fb_location_name %}
+												in <a href="/location/{{brag.fb_location_id}}">{{ brag.fb_location_name }}</a> 
+												{% endif %}
+				         				{% for c in brag.categories%}
+				           			<a href="/category/{{c}}">#{{c}} </a>
+				           			{%endfor%}
+				         			</p>
+				       			</div>          
+				       			<!--
+										<div class="brag-comments">...
+										</div>
+										--> 
+				     			</div><!-- /brag-entry -->
+								</div><!-- /brag-wrap -->
+				    		{% endfor %}
+				    	</div><!-- /brag-list -->   
+				  		{% endblock %}
+						</div><!-- /mainbar -->
+						{% endblock  %}						
+						
+						{% block sidebar%}
+					  <!-- SIDEBAR --> 
+					  <div id="sidebar">
+							{% if not current_user.fb_id %}
+					  	<div class="side-block">
+								<div id="start">
+					      	<h2>Go Green, Earn Beans!</h2>
+					        <ul>
+					        	<li><strong>Get ranked</strong> on your Green accomplishments.</li>
+					        	<li><strong>Reward</strong> your friends' who are going green.</li>					
+					          <li>Earn beans for you and your community and <strong>win prizes</strong>.</li>
+					        </ul>
+					        <div id="start-button">
+										<a href="/page/signup"><img src="/static/images/get-beans-button.png"/></a>
+									</div>
+					      </div><!-- /start -->
+					    </div><!-- /side-block -->
+							{% else %}
+					  	<div class="side-block">
+								<div id="update">
+					      	<p><span>Got Beans?<a href="/user/{{current_user.fb_id}}"> Update Your Status!</a></span></p>
+					      </div><!-- /start -->
+					    </div><!-- /side-block -->							
+							{% endif %}
+
+					  	<div class="side-block">
+					    	<div id="leaders" class="leader-box">
+									<div class="leader-box-header">
+					      		<h2>Greenbean Leaders</h2>
+					        </div>
+									<div class="leader-box-content">
+										<ul>
+										{% for x in leaders %}
+					        		<li>{{x.beans}} -- <a href="/user/{{x.user.fb_id}}">{{x.user.name}}</a></li>
+										{% endfor %}
+					      		</ul>
+									</div>
+					      </div><!-- /leaders -->
+					    </div><!-- /side-block -->
+
+					  	<div class="side-block">
+					    	<div id="cat-leaders" class="leader-box">
+									<div class="leader-box-header">
+					      		<h2>Top Categories</h2>
+									</div>
+									<div class="leader-box-content">
+					        	<ul>
+										{% for c in category_leaders %}
+					        		<li>{{c.beans}} -- <a href="/category/{{c.name}}">{{c.name}}</a></li>
+										{% endfor %}
+					      		</ul>
+									</div>
+					      </div><!-- /cat-leaders -->
+					    </div><!-- /side-block -->
+
+					  	<div class="side-block">
+					    	<div id="loc-leaders" class="leader-box">
+									<div class="leader-box-header">
+					      		<h2>Top Locations</h2>
+									</div>
+									<div class="leader-box-content">
+					        	<ul>
+										{% for l in location_leaders %}
+					         		<li>{{l.beans}} -- <a href="/location/{{l.fb_id}}">{{l.fb_name}}</a></li>
+					 					{% endfor %}
+					        	</ul>
+									</div>	
+					      </div><!-- /loc-leaders -->
+					    </div><!-- /side-block -->
+
+					  </div><!-- /sidebar -->						
+						
+						{% endblock %}						
+
+          </div><!-- /bar-wrapper -->
+        </div><!-- /content-middle -->
+      </div><!-- /content -->
+
+      <!-- FOOTER --> 
+      <div id="footer">
+      	<div id="content-bottom"></div>                  
+      </div>
+    </div><!-- /container -->
+
+		<!-- Facebook Authentication -->
+		<div id="fb-root"></div>
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({appId: '{{ facebook_app_id }}', status: true, cookie: true, 
+               xfbml: true});
+        FB.Event.subscribe('{% if current_user %}auth.logout{% else %}auth.login{% endif %}', function(response) {
+          window.location.reload();
+        });
+        FB.Canvas.setAutoResize();
+      };
+      (function() {
+        var e = document.createElement('script');
+        e.type = 'text/javascript';
+        e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+        e.async = true;
+        document.getElementById('fb-root').appendChild(e);
+      }());
+    </script>
+  </body>
+</html>

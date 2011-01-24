@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/9/trunk/tasks/static/javascript/debug
+END
+io.js
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/9/trunk/tasks/static/javascript/debug/io.js
+END
+offscreen.js
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/9/trunk/tasks/static/javascript/debug/offscreen.js
+END
+drag.js
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/9/trunk/tasks/static/javascript/debug/drag.js
+END
+externs_tasks.js
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/9/trunk/tasks/static/javascript/debug/externs_tasks.js
+END
+tasklist.js
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/9/trunk/tasks/static/javascript/debug/tasklist.js
+END
+dialog.js
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/9/trunk/tasks/static/javascript/debug/dialog.js
+END
+dom.js
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/9/trunk/tasks/static/javascript/debug/dom.js
+END
+event.js
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/9/trunk/tasks/static/javascript/debug/event.js
+END
+lang.js
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/9/trunk/tasks/static/javascript/debug/lang.js
+END
+browser.js
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/9/trunk/tasks/static/javascript/debug/browser.js
+END

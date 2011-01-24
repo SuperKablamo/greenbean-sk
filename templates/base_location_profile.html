@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+	{% block title %}{{location_beans.fb_name|escape}} - Greenbean{% endblock %}
+	
+	{% block main %}	
+	<!-- MAINBAR --> 
+	<div id="mainbar">
+		{% block top-content %}
+		<h1 id="location-name">
+			<span class="name">{{location_beans.fb_name|escape}} </span>
+			<span class="beans">{% if location_beans.beans %} {{location_beans.beans}} {% endif %}</span>
+		</h1>
+		<p>Latest bean requests for those looking to Go Green in the community of "{{location_beans.fb_name|escape}}".</p>
+    {% endblock %}
+
+		<!-- brag-list: container for list of Brags. --> 
+    <div id="brag-list">
+    {% for brag in brags %}
+  		<div class="brag-wrap">
+	  		<!-- user-profile: container for the user's avatar and name. -->
+	    	<div class="brag-user-profile">
+	    		<div class="profile-image">
+	      		<a href="{{ brag.user.fb_profile_url }}"><img src="http://graph.facebook.com/{{brag.user.fb_id }}/picture?type=square"/></a></p>
+	      	</div>
+	      	<div class="profile-name">
+	      		<h2>
+							<span class="name"><a href="/user/{{brag.user.fb_id}}">{{ brag.user.name|escape }}</a></span>
+							<!--<span class="beans-count"> ({{beans}})</span>-->
+						</h2>
+	      	</div>
+    		</div>
+    		<!-- brag-entry: container for a single Brag -->
+      	<div class="brag-entry">
+					<div class="brag-vote">
+						<form class="vote-form" action="">
+       				<div id="{{brag.key}}" class="vote-count">{{brag.beans}}</div>
+						  {% if current_user.fb_id %}
+							  {% if not current_user.fb_id|in_list:brag.voter_keys %}
+							  <input class="vote-button" type="submit" class="text-button" value="vote+"/>
+							  <input type="hidden" class="brag" name="brag" value="{{brag.key}}">
+							  <input type="hidden" class="votee" name="votee" value="{{brag.user.fb_id}}">
+							  <input type="hidden" class="voter" name="voter" value="{{current_user.fb_id}}">
+							  {% endif %}          	
+							{% endif %}
+        		</form>
+					</div>
+        	<div class="brag-message">
+        		<p>{{ brag.message|escape }}</p>
+        	</div>          
+        	<div class="brag-meta">
+         		<p>{{brag.created|timesince}} ago 
+						{% if brag.fb_location_name %}
+							in {{ brag.fb_location_name }} 
+						{% endif %}
+           		{% for c in brag.categories%}
+            	<a href="/category/{{c}}">#{{c}} </a>
+            	{%endfor%}
+          	</p>
+        	</div>          
+        	<!--
+					<div class="brag-comments">...
+					</div>
+					--> 
+      	</div><!-- /brag-entry -->
+			</div><!-- /brag-wrap -->
+    {% endfor %}
+    </div><!-- /brag-list -->                           
+  </div><!-- /mainbar -->
+	{% endblock %}	
