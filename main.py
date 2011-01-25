@@ -137,7 +137,7 @@ class UserProfile(MainHandler):
         """POSTs a new Brag.
         """
         logging.info('################## UserProfile::post #################')
-        user = getFBUser(fb_id=user_id) # this is the profiled User
+        user = getFBUser(user_id) # this is the profiled User
         message = self.request.get('message')
         origin = self.request.get('origin')
         categories = self.request.get_all('category')

@@ -30,6 +30,7 @@ h1#user-name, h1#category-name, h1#location-name { color: #4D7238; font-size: 20
 #sidebar strong { color: #4D7238; }
 ul#signup { font-size: 22px; padding-top: 8px; color: #636363; }
 .vote-count, .beans { font-family: arial; }
+p.share { font-size: 0.8em; }
 
 /*LAYOUT*/
 body { background-color: #eee9dc; }
@@ -85,7 +86,10 @@ h1 span.beans { font-size: 26px; -moz-border-radius: 20px; border: solid 0px #68
 #text-box .text-area { border: 1px solid #c3c7bd; }
 #tag-list { }
 #tag-list ul, #tag-list li { display: inline; color: #636363; font-size: 12px; }
+img.facebook-icon { padding: 0px 0 0 4px; vertical-align: text-bottom; }
 #submit-button { float: right; }
+p.share { text-align: right; padding: 0 0 0 0; }
+input.share-button { padding: 4px 0 10px; float: right; }
 
 #brag-list { margin: 20px 0; clear:both; overflow: hidden; }
 .brag-wrap { clear: both; }
@@ -96,6 +100,8 @@ h1 span.beans { font-size: 26px; -moz-border-radius: 20px; border: solid 0px #68
 .vote-button { background-color: transparent; text-decoration: underline; border: none; cursor: pointer; padding: 0; }
 
 .vote-count { font-size: 20px; -moz-border-radius: 20px; border: solid 0px #688b54; background-color: #688b54; color: white; margin-top: 4px; padding: 4px 10px 4px 10px; }
+
+
 
 /*SIDEBAR*/
 #sidebar { width: 260px; float: left; }
