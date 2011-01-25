@@ -68,7 +68,7 @@
 					      		</div>
 					      		<div class="profile-name">
 					      			<h2>
-												<span class="name"><a href="/user/{{brag.user.fb_id}}">{{ brag.user.name|escape }}</a></span>
+												<span class="name"><a href="/facebook/user/{{brag.user.fb_id}}">{{ brag.user.name|escape }}</a></span>
 												<!--<span class="beans-count"> ({{beans}})</span>-->
 											</h2>
 					      		</div>
@@ -94,10 +94,10 @@
 				       			<div class="brag-meta">
 				       				<p>{{brag.created|timesince}} ago 
 												{% if brag.fb_location_name %}
-												in <a href="/location/{{brag.fb_location_id}}">{{ brag.fb_location_name }}</a> 
+												in <a href="/facebook/location/{{brag.fb_location_id}}">{{ brag.fb_location_name }}</a> 
 												{% endif %}
 				         				{% for c in brag.categories%}
-				           			<a href="/category/{{c}}">#{{c}} </a>
+				           			<a href="/facebook/category/{{c}}">#{{c}} </a>
 				           			{%endfor%}
 				         			</p>
 				       			</div>          
@@ -133,7 +133,7 @@
 							{% else %}
 					  	<div class="side-block">
 								<div id="update">
-					      	<p><span>Got Beans?<a href="/user/{{current_user.fb_id}}"> Update Your Status!</a></span></p>
+					      	<p><span>Got Beans?<a href="/facebook/user/{{current_user.fb_id}}"> Update Your Status!</a></span></p>
 					      </div><!-- /start -->
 					    </div><!-- /side-block -->							
 							{% endif %}
@@ -146,7 +146,7 @@
 									<div class="leader-box-content">
 										<ul>
 										{% for x in leaders %}
-					        		<li>{{x.beans}} -- <a href="/user/{{x.user.fb_id}}">{{x.user.name}}</a></li>
+					        		<li>{{x.beans}} -- <a href="/facebook/user/{{x.user.fb_id}}">{{x.user.name}}</a></li>
 										{% endfor %}
 					      		</ul>
 									</div>
@@ -161,7 +161,7 @@
 									<div class="leader-box-content">
 					        	<ul>
 										{% for c in category_leaders %}
-					        		<li>{{c.beans}} -- <a href="/category/{{c.name}}">{{c.name}}</a></li>
+					        		<li>{{c.beans}} -- <a href="/facebook/category/{{c.name}}">{{c.name}}</a></li>
 										{% endfor %}
 					      		</ul>
 									</div>
@@ -176,7 +176,7 @@
 									<div class="leader-box-content">
 					        	<ul>
 										{% for l in location_leaders %}
-					         		<li>{{l.beans}} -- <a href="/location/{{l.fb_id}}">{{l.fb_name}}</a></li>
+					         		<li>{{l.beans}} -- <a href="/facebook/location/{{l.fb_id}}">{{l.fb_name}}</a></li>
 					 					{% endfor %}
 					        	</ul>
 									</div>	

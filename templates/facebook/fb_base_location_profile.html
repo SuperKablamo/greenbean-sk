@@ -1,0 +1,150 @@
+{% extends "fb_base.html" %}
+
+	{% block title %}{{profile_user.name|escape}} - Greenbean{% endblock %}
+	
+	{% block main %}	
+	<!-- MAINBAR --> 
+	<div id="mainbar">
+  	<!-- user-profile: container for the user's avatar and name. -->
+  	<div class="user-profile">
+    	<div class="profile-image">
+      	<a href="{{ profile_user.fb_profile_url }}"><img src="http://graph.facebook.com/{{ profile_user.fb_id }}/picture?type=square"/></a></p>
+      </div>
+      <div class="profile-name">
+      	<h1 id="user-name">
+					<span class="name">{{ profile_user.name|escape }} </span>
+					<span class="beans">{{beans}}</span>
+				</h1>
+      </div>
+    </div><!-- /user-profile -->
+  	<!-- brag-form: container for the Brag entry form -->
+		{% ifequal current_user.fb_id profile_user.fb_id %}
+    <div id="brag-form">
+      <h2>Doing something Green? Share it and earn rewards.</h2> 
+   	  <form name="input" action="/user/{{profile_user.fb_id}}" method="post"> 
+      	<div id="text-box">
+  				<textarea class="text-area" id="message" name="message" rows="3" cols="46"></textarea>
+        </div>
+        <div id="tag-list">
+        	<ul>
+          {% for c in categories %}
+          	<li>
+            	<label><input name="category" type="checkbox" value="{{c}}" />{{c}}</label>
+            </li>
+          {%endfor %}
+          </ul>
+        </div>
+				<input type="hidden" id="origin" name="origin" value="facebook"/>
+        <div id="submit-button">
+					<input type="submit" name="submit" class="button" id="share-button" value="Share" >
+				</div>
+      </form>
+    </div><!-- /brag-form -->
+		{%endifequal%}
+    <!-- brag-list: container for list of Brags. --> 
+    <div id="brag-list">
+    {% for brag in brags %}
+    	<!-- brag-entry: container for a single Brag -->
+      <div class="brag-entry">
+      	<div class="brag-vote">
+					<form class="vote-form" action="">
+       			<div id="{{brag.key}}" class="vote-count">{{brag.beans}}</div>
+						{% if current_user.fb_id %}
+						  {% if not current_user.fb_id|in_list:brag.voter_keys %}
+						  <input class="vote-button" type="submit" class="text-button" value="vote+"/>
+						  <input type="hidden" class="brag" name="brag" value="{{brag.key}}">
+						  <input type="hidden" class="votee" name="votee" value="{{profile_user.fb_id}}">
+						  <input type="hidden" class="voter" name="voter" value="{{current_user.fb_id}}">
+						  {% endif %} 
+						{% endif %}         	
+        	</form>
+				</div>
+        <div class="brag-message">
+        	<p>{{ brag.message|escape }}</p>
+        </div>          
+        <div class="brag-meta">
+         	<p>{{brag.created|timesince}} ago 
+					{% if brag.fb_location_name %}
+						<a href="/location/{{brag.fb_location_id}}">{{ brag.fb_location_name }}</a> 
+					{% endif %}
+           	{% for c in brag.categories%}
+            <a href="/category/{{c}}">#{{c}} </a>
+            {%endfor%}
+          </p>
+        </div>          
+        <!--
+				<div class="brag-comments">...
+				</div>
+				--> 
+      </div><!-- /brag-entry -->
+    {% endfor %}
+    </div><!-- /brag-list -->                           
+  </div><!-- /mainbar -->
+	{% endblock %}	
+
+	{% block sidebar%}
+  <!-- SIDEBAR --> 
+  <div id="sidebar">
+		{% if not current_user.fb_id %}
+  	<div class="side-block">
+			<div id="start">
+      	<h2>Go Green, Earn Beans!</h2>
+        <ul>
+        	<li><strong>Get ranked</strong> on your Green accomplishments.</li>
+        	<li><strong>Reward</strong> your friends' who are going green.</li>					
+          <li>Earn beans for you and your community and <strong>win prizes</strong>.</li>
+        </ul>
+        <div id="start-button">
+					<a href="/page/signup"><img src="/static/images/get-beans-button.png"/></a>
+				</div>
+      </div><!-- /start -->
+    </div><!-- /side-block -->
+		{% endif %}
+
+  	<div class="side-block">
+    	<div id="leaders" class="leader-box">
+				<div class="leader-box-header">
+      		<h2>Greenbean Leaders</h2>
+        </div>
+				<div class="leader-box-content">
+					<ul>
+					{% for x in leaders %}
+        		<li>{{x.beans}} -- <a href="/user/{{x.user.fb_id}}">{{x.user.name}}</a></li>
+					{% endfor %}
+      		</ul>
+				</div>
+      </div><!-- /leaders -->
+    </div><!-- /side-block -->
+
+  	<div class="side-block">
+    	<div id="cat-leaders" class="leader-box">
+				<div class="leader-box-header">
+      		<h2>Top Categories</h2>
+				</div>
+				<div class="leader-box-content">
+        	<ul>
+					{% for c in category_leaders %}
+        		<li>{{c.beans}} -- <a href="/category/{{c.name}}">{{c.name}}</a></li>
+					{% endfor %}
+      		</ul>
+				</div>
+      </div><!-- /cat-leaders -->
+    </div><!-- /side-block -->
+
+  	<div class="side-block">
+    	<div id="loc-leaders" class="leader-box">
+				<div class="leader-box-header">
+      		<h2>Top Locations</h2>
+				</div>
+				<div class="leader-box-content">
+        	<ul>
+					{% for l in location_leaders %}
+         		<li>{{l.beans}} -- <a href="/location/{{l.fb_id}}">{{l.fb_name}}</a></li>
+ 					{% endfor %}
+        	</ul>
+				</div>	
+      </div><!-- /loc-leaders -->
+    </div><!-- /side-block -->
+
+  </div><!-- /sidebar -->						
+	{% endblock %}	
