@@ -2,10 +2,8 @@
 # Copyright 2010 SuperKablamo, LLC
 # info@superkablamo.com
 #
-
 ############################# IMPORTS ########################################
 ############################################################################## 
-
 import base64
 import cgi
 import Cookie
@@ -399,7 +397,7 @@ def main():
                                               (r'/facebook/category/(.*)', CategoryProfile),  
                                               (r'/facebook/location/(.*)', LocationProfile), 
                                               ('/bean', Bean),
-                                              ('/facebook', BaseHandler),
+                                              ('/facebook/', BaseHandler),
                                               ('/', BaseHandler)],
                                               debug=DEBUG))
 ##############################################################################
