@@ -29,184 +29,202 @@
 		</script>
 
     </head>
-  <body id="facebook">
-    <div id="container">
-
-    	<!-- HEADER --> 
-      <div id="header">
-				<div id="top">
-					<div id="top-left">
-						<div id="logo"><a href="/"><img src="/static/images/logo.png"/></a></div>
-					</div>
-					<div id="top-right">
+	  <body id="facebook">
+	    <div id="container">
+	    	<!-- HEADER --> 
+	      <div id="header">
+					<div id="top">
+						<div id="top-left">
+							<div id="logo"><a href="/facebook/"><img src="/static/images/logo.png"/></a></div>
+						</div>
+						<div id="top-right">
+							<div id="login-wrap">
+								<div id="fb-login">
+									<div id="fb-button">
+										<fb:login-button style="visibility:hidden" autologoutlink="true" perms="publish_checkins,publish_stream"></fb:login-button>
+									</div>
+								</div><!-- /fb-login -->
+						  </div><!-- /login-wrap -->
+						</div>	
 					</div>	
-				</div>		
+	        <div id="content-top"></div>
+	      </div>
 
-        <div id="content-top"></div>
-      </div>
+	      <!-- MAIN CONTENT --> 
+	      <div id="content">
+	        <div id="content-middle">
+	        	<div id="bar-wrapper">
+							{% block main %}
+							<div id="mainbar">
+								{% block top-content %}
+						    <!-- brag-list: container for list of Brags. --> 
+								<h1>Recent Green Updates</h1>
+								<p>Login with Facebook to earn and award greenbeans!  </p>
+						    {% endblock %}							
+								{% block brags %}
+					    	<div id="brag-list">
+					    		{% for brag in brags %}
+					  			<div class="brag-wrap">
+						  			<!-- user-profile: container for the user's avatar and name. -->
+						    		<div class="brag-user-profile">
+						    			<div class="profile-image">
+						      			<a href="{{ brag.user.fb_profile_url }}"><img src="http://graph.facebook.com/{{brag.user.fb_id }}/picture?type=square"/></a></p>
+						      		</div>
+						      		<div class="profile-name">
+						      			<h2>
+													<span class="name"><a href="/facebook/user/{{brag.user.fb_id}}">{{ brag.user.name|escape }}</a></span>
+													<!--<span class="beans-count"> ({{beans}})</span>-->
+												</h2>
+						      		</div>
+					    			</div>
+					    			<!-- brag-entry: container for a single Brag -->
+					      		<div class="brag-entry">
+											<div class="brag-vote">
+												<form class="vote-form" action="">
+					       					<div id="{{brag.key}}" class="vote-count">{{brag.beans}}</div>
+											  	{% if current_user.fb_id %}
+												  	{% if not current_user.fb_id|in_list:brag.voter_keys %}
+												  	<input class="vote-button" type="submit" class="text-button" value="vote+"/>
+												  	<input type="hidden" class="brag" name="brag" value="{{brag.key}}">
+												  	<input type="hidden" class="votee" name="votee" value="{{brag.user.fb_id}}">
+												  	<input type="hidden" class="voter" name="voter" value="{{current_user.fb_id}}">
+												  	{% endif %}
+													{% endif %}          	
+					       				</form>
+											</div>
+					       			<div class="brag-message">
+					       				<p>{{ brag.message|escape }}</p>
+					       			</div>          
+					       			<div class="brag-meta">
+					       				<p>{{brag.created|timesince}} ago 
+													{% if brag.fb_location_name %}
+													in <a href="/facebook/location/{{brag.fb_location_id}}">{{ brag.fb_location_name }}</a> 
+													{% endif %}
+					         				{% for c in brag.categories%}
+					           			<a href="/facebook/category/{{c}}">#{{c}} </a>
+					           			{%endfor%}
+					         			</p>
+					       			</div>          
+					       			<!--
+											<div class="brag-comments">...
+											</div>
+											--> 
+					     			</div><!-- /brag-entry -->
+									</div><!-- /brag-wrap -->
+					    		{% endfor %}
+					    	</div><!-- /brag-list -->   
+					  		{% endblock %}
+							</div><!-- /mainbar -->				
+							{% endblock  %}
 
-      <!-- MAIN CONTENT --> 
-      <div id="content">
-        <div id="content-middle">
-        	<div id="bar-wrapper">
-						{% block main %}
-						<div id="mainbar">
-							{% block top-content %}
-					    <!-- brag-list: container for list of Brags. --> 
-							<h1>Recent Green Updates</h1>
-							<p>Login with Facebook to earn and award greenbeans!  </p>
-						
-						{% endblock  %}
-							{% block brags %}
-				    	<div id="brag-list">
-				    		{% for brag in brags %}
-				  			<div class="brag-wrap">
-					  			<!-- user-profile: container for the user's avatar and name. -->
-					    		<div class="brag-user-profile">
-					    			<div class="profile-image">
-					      			<a href="{{ brag.user.fb_profile_url }}"><img src="http://graph.facebook.com/{{brag.user.fb_id }}/picture?type=square"/></a></p>
-					      		</div>
-					      		<div class="profile-name">
-					      			<h2>
-												<span class="name"><a href="/facebook/user/{{brag.user.fb_id}}">{{ brag.user.name|escape }}</a></span>
-												<!--<span class="beans-count"> ({{beans}})</span>-->
-											</h2>
-					      		</div>
-				    			</div>
-				    			<!-- brag-entry: container for a single Brag -->
-				      		<div class="brag-entry">
-										<div class="brag-vote">
-											<form class="vote-form" action="">
-				       					<div id="{{brag.key}}" class="vote-count">{{brag.beans}}</div>
-										  	{% if current_user.fb_id %}
-											  	{% if not current_user.fb_id|in_list:brag.voter_keys %}
-											  	<input class="vote-button" type="submit" class="text-button" value="vote+"/>
-											  	<input type="hidden" class="brag" name="brag" value="{{brag.key}}">
-											  	<input type="hidden" class="votee" name="votee" value="{{brag.user.fb_id}}">
-											  	<input type="hidden" class="voter" name="voter" value="{{current_user.fb_id}}">
-											  	{% endif %}
-												{% endif %}          	
-				       				</form>
+							{% block sidebar%}
+						  <!-- SIDEBAR --> 
+						  <div id="sidebar">
+								{% if not current_user.fb_id %}
+						  	<div class="side-block">
+									<div id="start">
+						      	<h2>Go Green, Earn Beans!</h2>
+						        <ul>
+						        	<li><strong>Get ranked</strong> on your Green accomplishments.</li>
+						        	<li><strong>Reward</strong> your friends' who are going green.</li>					
+						          <li>Earn beans for you and your community and <strong>win prizes</strong>.</li>
+						        </ul>
+						        <div id="start-button">
+											<a href="/page/signup"><img src="/static/images/get-beans-button.png"/></a>
 										</div>
-				       			<div class="brag-message">
-				       				<p>{{ brag.message|escape }}</p>
-				       			</div>          
-				       			<div class="brag-meta">
-				       				<p>{{brag.created|timesince}} ago 
-												{% if brag.fb_location_name %}
-												in <a href="/facebook/location/{{brag.fb_location_id}}">{{ brag.fb_location_name }}</a> 
-												{% endif %}
-				         				{% for c in brag.categories%}
-				           			<a href="/facebook/category/{{c}}">#{{c}} </a>
-				           			{%endfor%}
-				         			</p>
-				       			</div>          
-				       			<!--
-										<div class="brag-comments">...
+						      </div><!-- /start -->
+						    </div><!-- /side-block -->
+								{% else %}
+						  	<div class="side-block">
+									<div id="update">
+						      	<p><span>Got Beans?<a href="/facebook/user/{{current_user.fb_id}}"> Update Your Status!</a></span></p>
+						      </div><!-- /start -->
+						    </div><!-- /side-block -->							
+								{% endif %}
+
+						  	<div class="side-block">
+						    	<div id="leaders" class="leader-box">
+										<div class="leader-box-header">
+						      		<h2>Greenbean Leaders</h2>
+						        </div>
+										<div class="leader-box-content">
+											<ul>
+											{% for x in leaders %}
+						        		<li>{{x.beans}} -- <a href="/facebook/user/{{x.user.fb_id}}">{{x.user.name}}</a></li>
+											{% endfor %}
+						      		</ul>
 										</div>
-										--> 
-				     			</div><!-- /brag-entry -->
-								</div><!-- /brag-wrap -->
-				    		{% endfor %}
-				    	</div><!-- /brag-list -->   
-				  		{% endblock %}
-						</div><!-- /mainbar -->
-						{% endblock  %}						
-						
-						{% block sidebar%}
-					  <!-- SIDEBAR --> 
-					  <div id="sidebar">
-							{% if not current_user.fb_id %}
-					  	<div class="side-block">
-								<div id="start">
-					      	<h2>Go Green, Earn Beans!</h2>
-					        <ul>
-					        	<li><strong>Get ranked</strong> on your Green accomplishments.</li>
-					        	<li><strong>Reward</strong> your friends' who are going green.</li>					
-					          <li>Earn beans for you and your community and <strong>win prizes</strong>.</li>
-					        </ul>
-					        <div id="start-button">
-										<a href="/page/signup"><img src="/static/images/get-beans-button.png"/></a>
-									</div>
-					      </div><!-- /start -->
-					    </div><!-- /side-block -->
-							{% else %}
-					  	<div class="side-block">
-								<div id="update">
-					      	<p><span>Got Beans?<a href="/facebook/user/{{current_user.fb_id}}"> Update Your Status!</a></span></p>
-					      </div><!-- /start -->
-					    </div><!-- /side-block -->							
-							{% endif %}
+						      </div><!-- /leaders -->
+						    </div><!-- /side-block -->
 
-					  	<div class="side-block">
-					    	<div id="leaders" class="leader-box">
-									<div class="leader-box-header">
-					      		<h2>Greenbean Leaders</h2>
-					        </div>
-									<div class="leader-box-content">
-										<ul>
-										{% for x in leaders %}
-					        		<li>{{x.beans}} -- <a href="/facebook/user/{{x.user.fb_id}}">{{x.user.name}}</a></li>
-										{% endfor %}
-					      		</ul>
-									</div>
-					      </div><!-- /leaders -->
-					    </div><!-- /side-block -->
+						  	<div class="side-block">
+						    	<div id="cat-leaders" class="leader-box">
+										<div class="leader-box-header">
+						      		<h2>Top Categories</h2>
+										</div>
+										<div class="leader-box-content">
+						        	<ul>
+											{% for c in category_leaders %}
+						        		<li>{{c.beans}} -- <a href="/facebook/category/{{c.name}}">{{c.name}}</a></li>
+											{% endfor %}
+						      		</ul>
+										</div>
+						      </div><!-- /cat-leaders -->
+						    </div><!-- /side-block -->
 
-					  	<div class="side-block">
-					    	<div id="cat-leaders" class="leader-box">
-									<div class="leader-box-header">
-					      		<h2>Top Categories</h2>
-									</div>
-									<div class="leader-box-content">
-					        	<ul>
-										{% for c in category_leaders %}
-					        		<li>{{c.beans}} -- <a href="/facebook/category/{{c.name}}">{{c.name}}</a></li>
-										{% endfor %}
-					      		</ul>
-									</div>
-					      </div><!-- /cat-leaders -->
-					    </div><!-- /side-block -->
+						  	<div class="side-block">
+						    	<div id="loc-leaders" class="leader-box">
+										<div class="leader-box-header">
+						      		<h2>Top Locations</h2>
+										</div>
+										<div class="leader-box-content">
+						        	<ul>
+											{% for l in location_leaders %}
+						         		<li>{{l.beans}} -- <a href="/facebook/location/{{l.fb_id}}">{{l.fb_name}}</a></li>
+						 					{% endfor %}
+						        	</ul>
+										</div>	
+						      </div><!-- /loc-leaders -->
+						    </div><!-- /side-block -->
 
-					  	<div class="side-block">
-					    	<div id="loc-leaders" class="leader-box">
-									<div class="leader-box-header">
-					      		<h2>Top Locations</h2>
-									</div>
-									<div class="leader-box-content">
-					        	<ul>
-										{% for l in location_leaders %}
-					         		<li>{{l.beans}} -- <a href="/facebook/location/{{l.fb_id}}">{{l.fb_name}}</a></li>
-					 					{% endfor %}
-					        	</ul>
-									</div>	
-					      </div><!-- /loc-leaders -->
-					    </div><!-- /side-block -->
+						  </div><!-- /sidebar -->						
+							{% endblock %}						
 
-					  </div><!-- /sidebar -->						
-						
-						{% endblock %}						
+	          </div><!-- /bar-wrapper -->
+	        </div><!-- /content-middle -->
+	      </div><!-- /content -->
 
-          </div><!-- /bar-wrapper -->
-        </div><!-- /content-middle -->
-      </div><!-- /content -->
-
-      <!-- FOOTER --> 
-      <div id="footer">
-      	<div id="content-bottom"></div>                  
-      </div>
-    </div><!-- /container -->
+	      <!-- FOOTER --> 
+	      <div id="footer">
+	      	<div id="content-bottom"></div>   
+	        <div id="footer-content">
+						<div id="bottom-nav">
+							<ul>
+								<li><a href="/page/about">About</a></li>
+								<li>|</li>
+								<li><a href="/page/rewards">Rewards</a></li>
+								<li>|</li>
+								<li><a href="/page/contact">Contact</a></li>							
+								<li>|</li>
+								<li><a href="/page/terms">Terms</a></li>							
+							</ul>
+						</div>
+	        	<div id="credit"><a href="http://code.google.com/appengine/"><img src="/static/images/appengine-silver-120x30.gif"/></a></div>
+	        </div>       
+	      </div>
+	    </div><!-- /container -->
 
 		<!-- Facebook Authentication -->
 		<div id="fb-root"></div>
     <script>
       window.fbAsyncInit = function() {
+	      FB.Canvas.setSize({ width: 760, height: 1160 });
         FB.init({appId: '{{ facebook_app_id }}', status: true, cookie: true, 
                xfbml: true});
         FB.Event.subscribe('{% if current_user %}auth.logout{% else %}auth.login{% endif %}', function(response) {
           window.location.reload();
         });
-        FB.Canvas.setAutoResize();
+        //FB.Canvas.setAutoResize();
       };
       (function() {
         var e = document.createElement('script');

@@ -87,13 +87,14 @@ class BaseHandler(MainHandler):
         # TODO: build lists of top users, categories and locations.
         logging.info("#############  BaseHandler:: get(self): ##############")
         logging.info("############# self.request.path="+self.request.path+" ##############")        
-        brags = getRecentBrags()
         category_leaders = getCategoryLeaders()
         location_leaders = getLocationLeaders()
         leaders = getLeaders() 
         if isFacebook(self.request.path):
+            brags = getRecentBrags(4)
             template = "facebook/fb_base.html"            
         else:    
+            brags = getRecentBrags(10)
             template = "base.html"  
         self.generate(template, {
                       'brags': brags,
@@ -161,7 +162,7 @@ class CategoryProfile(MainHandler):
         category_leaders = getCategoryLeaders()
         location_leaders = getLocationLeaders()
         leaders = getLeaders()        
-        if facebookRequest(self.request.path):
+        if isFacebook(self.request.path):
             template = "facebook/fb_base_category_profile.html"            
         else:    
             template = "base_category_profile.html"
@@ -187,7 +188,7 @@ class LocationProfile(MainHandler):
         category_leaders = getCategoryLeaders()
         location_leaders = getLocationLeaders()
         leaders = getLeaders()        
-        if facebookRequest(self.request.path):
+        if isFacebook(self.request.path):
             template = "facebook/fb_base_location_profile.html"            
         else:    
             template = "base_location_profile.html"
@@ -353,9 +354,9 @@ def getLocationLeaders():
     location_leaders_query = models.LocationBeans.all().order('-beans')
     return location_leaders_query.fetch(10)         
 
-def getRecentBrags():
+def getRecentBrags(count):
     brags_query = models.Brag.all().order('-created')
-    return brags_query.fetch(10)    
+    return brags_query.fetch(count)    
 
 def getUserBeans(user, self):
     try:
