@@ -141,6 +141,7 @@ class UserProfile(MainHandler):
         message = self.request.get('message')
         origin = self.request.get('origin')
         categories = self.request.get_all('category')
+        share = self.request.get('facebook')        
         brag = models.Brag(user = user,
                            categories = categories,
                            message = message,
@@ -148,6 +149,19 @@ class UserProfile(MainHandler):
                            fb_location_id=user.fb_location_id,
                            fb_location_name=user.fb_location_name)
         brag.put()
+        if share.upper() == 'TRUE':# Announce checkin on Facebook Wall
+            attachment = {}
+            caption = 'GreenBean is AWESOME. I am earning points by being Green!'
+            attachment['caption'] = caption
+            attachment['name'] = 'Play GreenBean'
+            attachment['link'] = 'http://apps.facebook.com/' + SITE + '/user?user=' + user.fb_id
+            attachment['description'] = 'Vote for my Bean!'
+            attachment['picture'] = 'http://greenbean.me/public/checkresizeimg.php?src=user_image/41388_679874743_5282_n.jpg&w=35&h=35&zc=1'
+            # take the 2 lines out below to just update the db - not facebook
+            # good for testing
+            results = facebook.GraphAPI(user.fb_access_token).put_wall_post(message, attachment)
+            status_id = str(results['id'])
+
         self.redirect('/user/'+user_id)  
         return          
 
