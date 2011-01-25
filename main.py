@@ -88,15 +88,15 @@ class BaseHandler(MainHandler):
     def get(self):
         # TODO: build lists of top users, categories and locations.
         logging.info("#############  BaseHandler:: get(self): ##############")
+        logging.info("############# self.request.path="+self.request.path+" ##############")        
         brags = getRecentBrags()
         category_leaders = getCategoryLeaders()
         location_leaders = getLocationLeaders()
-        leaders = getLeaders()        
-        if facebookRequest(self.request):
+        leaders = getLeaders() 
+        if isFacebook(self.request.path):
             template = "facebook/fb_base.html"            
         else:    
             template = "base.html"  
-                 
         self.generate(template, {
                       'brags': brags,
                       'leaders': leaders,
@@ -104,7 +104,7 @@ class BaseHandler(MainHandler):
                       'location_leaders': location_leaders,        
                       'current_user':self.current_user,
                       'facebook_app_id':FACEBOOK_APP_ID})
-
+                   
 class UserProfile(MainHandler):
     """Returns content for User Profile pages.
     """
@@ -118,9 +118,8 @@ class UserProfile(MainHandler):
         category_leaders = getCategoryLeaders()
         location_leaders = getLocationLeaders()
         leaders = getLeaders()                
-        if facebookRequest(self.request):
-            template = "facebook/fb_base_user_profile.html"
-            
+        if isFacebook(self.request.path):
+            template = "facebook/fb_base_user_profile.html"            
         else:    
             template = "base_user_profile.html"
         
@@ -152,7 +151,7 @@ class UserProfile(MainHandler):
         brag.put()
         self.redirect('/user/'+user_id)  
         return          
-        
+
 class CategoryProfile(MainHandler):
     """Returns content for Category Profile pages.
     """    
@@ -164,7 +163,7 @@ class CategoryProfile(MainHandler):
         category_leaders = getCategoryLeaders()
         location_leaders = getLocationLeaders()
         leaders = getLeaders()        
-        if facebookRequest(self.request):
+        if facebookRequest(self.request.path):
             template = "facebook/fb_base_category_profile.html"            
         else:    
             template = "base_category_profile.html"
@@ -190,7 +189,7 @@ class LocationProfile(MainHandler):
         category_leaders = getCategoryLeaders()
         location_leaders = getLocationLeaders()
         leaders = getLeaders()        
-        if facebookRequest(self.request):
+        if facebookRequest(self.request.path):
             template = "facebook/fb_base_location_profile.html"            
         else:    
             template = "base_location_profile.html"
@@ -274,7 +273,6 @@ class Page(MainHandler):
             template = "base_terms.html"        
         else:
             template = "base_404.html"   
-
         self.generate(template, {
                       'current_user':self.current_user,
                       'facebook_app_id':FACEBOOK_APP_ID})        
@@ -337,20 +335,6 @@ def getLocationBrags(location_id):
     brags_query.order('-created')
     return brags_query.fetch(10)    
 
-def facebookRequest(request):
-    """Returns True if request is from a Facebook iFrame, otherwise False.
-    """
-    try:
-        referer = request.headers["Referer"]
-        logging.info("############# Referer = " + referer + "###############")
-    except KeyError:
-        return False    
-    if re.search(r".*apps\.facebook\.com.*", referer): # match a Facebook apps uri
-        logging.info("############### facebook.com detected! ###############")
-        return True
-    else:
-        return False
-
 def getFBUser(fb_id=None):
     """Returns a User for the given fb_id.
     """
@@ -386,7 +370,17 @@ def getUserBeans(user, self):
         return user_beans.beans
     else:
         return 0
-        
+
+def isFacebook(path):
+    """Returns True if request is from a Facebook iFrame, otherwise False.
+    """
+    if re.search(r".facebook\.*", path): # match a Facebook apps uri
+        logging.info("############### facebook detected! ###############")
+        return True
+    else:
+        logging.info("############### facebook NOT detected! ###########")        
+        return False      
+
 def isSpam(user_fb_id):
     user = models.User.get_by_key_name(user_fb_id)
     if user.name is not None: # User's w/out name have bypassed Facebook login
@@ -401,8 +395,12 @@ def main():
                                               (r'/user/(.*)', UserProfile),
                                               (r'/category/(.*)', CategoryProfile),  
                                               (r'/location/(.*)', LocationProfile),
+                                              (r'/facebook/user/(.*)', UserProfile),
+                                              (r'/facebook/category/(.*)', CategoryProfile),  
+                                              (r'/facebook/location/(.*)', LocationProfile), 
                                               ('/bean', Bean),
-                                              (r'/.*', BaseHandler)],
+                                              ('/facebook', BaseHandler),
+                                              ('/', BaseHandler)],
                                               debug=DEBUG))
 ##############################################################################
 ############################################################################## 

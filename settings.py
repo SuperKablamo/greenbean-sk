@@ -1,13 +1,13 @@
 ## APPSPOT.COM - UNCOMMENT FOR PRODUCTION ####################################
-FACEBOOK_APP_ID = "112884208756371"
-FACEBOOK_APP_SECRET = "9091225114bdb7017e6b3c23a09cfb38"
-SITE="Greenbean.me"
+#FACEBOOK_APP_ID = "112884208756371"
+#FACEBOOK_APP_SECRET = "9091225114bdb7017e6b3c23a09cfb38"
+#SITE="Greenbean.me"
 ##############################################################################
 
 ## LOCALHOST:8080 - UNCOMMENT FOR LOCAL TESTING ##############################
-#FACEBOOK_APP_ID = "174331539272451"
-#FACEBOOK_APP_SECRET = "f4f8e3762a2abbe62dee8bf44a4967a4"
-#SITE="localhosttest-sk"
+FACEBOOK_APP_ID = "174331539272451"
+FACEBOOK_APP_SECRET = "f4f8e3762a2abbe62dee8bf44a4967a4"
+SITE="localhosttest-sk"
 ##############################################################################
 
 ## SAM LOCALHOST:8096 - UNCOMMENT FOR LOCAL TESTING ##########################
@@ -30,3 +30,4 @@ CATS=["Reduce","Reuse","Recycle","Organic","Wind","Solar",
 ERROR_PAGE = "base_404.html"      
 
 DEBUG = True
+FACEBOOK = "facebook"

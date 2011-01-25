@@ -29,7 +29,7 @@
 		</script>
 
     </head>
-  <body>
+  <body id="facebook">
     <div id="container">
 
     	<!-- HEADER --> 
@@ -39,28 +39,6 @@
 						<div id="logo"><a href="/"><img src="/static/images/logo.png"/></a></div>
 					</div>
 					<div id="top-right">
-						<div id="login-wrap">
-							<div id="fb-login" style="visibility:hidden">
-								<div id="fb-button" style="visibility:hidden">
-									<fb:login-button autologoutlink="true" perms="publish_checkins,publish_stream"></fb:login-button>
-								</div>
-				    		{% if current_user %}
-				      	<div id="fb-profile">
-									<p>Hello, <a href="/user/{{current_user.fb_id}}">{{current_user.name}}</a></p>
-								</div>
-				    		{% endif %}
-							</div><!-- /fb-login -->
-					  </div><!-- /login-wrap -->
-						<!--
-						<div id="top-nav-wrap">
-							<div id="top-nav">
-								<ul>
-									<li><a href="/top/users">Top Users</a></li>
-									<li><a href="/top/locations">Top Locations</a></li>
-									<li><a href="/top/categories">Top Categories</a></li>								
-								</ul>
-							</div>		
-						</div> -->
 					</div>	
 				</div>		
 
