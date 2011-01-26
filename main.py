@@ -228,9 +228,9 @@ class Bean(MainHandler):
                 brag.voter_keys.append(voter_fb_id)
                 brag.beans += 1
                 brag.put()
-                # Update the bean count for user
-                user.beans += 1
-                user.put()    
+                # Update the bean count for owner of the Brag getting a vote
+                votee_user.beans += 1
+                votee_user.put()    
                 # Update the CategoryBeans  
                 for c in brag.categories:
                     cat_beans = models.CategoryBeans.get_by_key_name(c)
