@@ -372,10 +372,10 @@ def shareOnFacebook(self, user, brag):
     attachment = {}
     attachment['caption'] = "How are you helping the planet?"
     attachment['name'] = "Go Green!"
-    attachment['link'] = FACEBOOK_URL+SITE+"/facebook/user/"+user.fb_id
+    attachment['link'] = FACEBOOK_URL+SITE
     attachment['description'] = "Earn points for going green.  See how you and your community measure up as stewards of the planet."
     attachment['picture'] = "http://willmerydith.storage.s3.amazonaws.com/avatars/facebook-wall-logo.png"
-    vote_link = FACEBOOK_URL+SITE+"/facebook/user/"+str(user.fb_id)
+    vote_link = FACEBOOK_URL+SITE
     actions = {"name": "Vote for this.", "link": vote_link}
     attachment['actions'] = actions
     results = facebook.GraphAPI(

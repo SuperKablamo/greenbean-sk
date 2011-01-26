@@ -41,11 +41,11 @@ body { background-color: #eee9dc; }
 
 /*HEADER*/
 #header { width: 100%; }
-#top { height: 76px; }
+#top { height: 68px; }
 #top-left { float: left; }
 #top-right { float: right; }
 #logo-wrap { }
-#logo { width: 280px; height: 76px; margin-left: 20px; float: left; }
+#logo { width: 280px; height: 64px; margin: 4px 0 0 8px; float: left; }
 #fb-login { margin: 4px 26px 4px 0px; width: 400px; float: right; }
 #fb-button { float: right; }
 #fb-profile { float: right; padding: 2px 16px 0 0; }
