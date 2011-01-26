@@ -137,7 +137,7 @@
 								{% else %}
 						  	<div class="side-block">
 									<div id="update">
-						      	<p><span>Got Beans?<a href="/facebook/user/{{current_user.fb_id}}"> Update Your Status!</a></span></p>
+						      	<p><span>Got Beans?<a href="/facebook/user/{{current_user.fb_id}}"> Update Your Status!</a></span><img class="arrow" src="/static/images/arrow.png"></p>
 						      </div><!-- /start -->
 						    </div><!-- /side-block -->							
 								{% endif %}
@@ -200,6 +200,8 @@
 	        <div id="footer-content">
 						<div id="bottom-nav">
 							<ul>
+								<li><a href="{{host}}/" target="_top">Home</a></li>
+								<li>|</li>
 								<li><a href="/facebook/page/about">About</a></li>
 								<li>|</li>
 								<!-- <li><a href="/facebook/page/rewards">Rewards</a></li>

@@ -8,7 +8,7 @@
 
 		{% block top-content %}
 		<h1 id="category-name">
-			<span class="name">Category: {{category}} </span>
+			<span class="type">Category:&nbsp;</span> <span class="name">{{category}} </span>
 			<span class="beans">{% if category_beans.beans %}{{category_beans.beans}}{% else %}0{% endif %}</span>
 		</h1>	
 		<p>Latest bean requests for those looking to Go Green in the category "{{category}}".</p>

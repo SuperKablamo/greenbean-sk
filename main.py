@@ -114,15 +114,15 @@ class UserProfile(MainHandler):
         profile_user = getFBUser(fb_id=user_id) # this is the profiled User
         brag_query = models.Brag.all().order('-created')
         brag_query = brag_query.filter('user', profile_user)
-        brags = brag_query.fetch(10)
         category_leaders = getCategoryLeaders()
         location_leaders = getLocationLeaders()
         leaders = getLeaders()                
         if isFacebook(self.request.path):
+            brags = brag_query.fetch(6)
             template = "facebook/fb_base_user_profile.html"            
         else:    
-            template = "base_user_profile.html"
-        
+            brags = brag_query.fetch(10)
+            template = "base_user_profile.html"        
         self.generate(template, {
                       'host': self.request.host_url, 
                       'brags': brags,
@@ -160,14 +160,15 @@ class CategoryProfile(MainHandler):
     def get(self, category=None):
         logging.info('################ CategoryProfile::get ################')
         user = self.current_user # this is the logged in User
-        brags = getCategoryBrags(category)
         category_beans = models.CategoryBeans.get_by_key_name(category)
         category_leaders = getCategoryLeaders()
         location_leaders = getLocationLeaders()
         leaders = getLeaders()        
         if isFacebook(self.request.path):
+            brags = getCategoryBrags(category, 4)
             template = "facebook/fb_base_category_profile.html"            
         else:    
+            brags = getCategoryBrags(category, 10)            
             template = "base_category_profile.html"
             
         self.generate(template, {
@@ -187,14 +188,16 @@ class LocationProfile(MainHandler):
     def get(self, location_id=None):
         logging.info('################ LocationProfile::get ################')
         user = self.current_user # this is the logged in User
-        brags = getLocationBrags(location_id)
+
         location_beans = models.LocationBeans.get_by_key_name(location_id)
         category_leaders = getCategoryLeaders()
         location_leaders = getLocationLeaders()
         leaders = getLeaders()        
         if isFacebook(self.request.path):
+            brags = getLocationBrags(location_id, 4)
             template = "facebook/fb_base_location_profile.html"            
         else:    
+            brags = getLocationBrags(location_id, 10)
             template = "base_location_profile.html"
             
         self.generate(template, {
@@ -324,19 +327,19 @@ def getUser(graph, cookie):
             location_beans.put()           
     return user
 
-def getCategoryBrags(category):
+def getCategoryBrags(category, count):
     """Returns a list of Brags for a specific Category ordered by date desc.
     """
     brags_query = models.Brag.all().filter('categories =', category)
     brags_query.order('-created')
-    return brags_query.fetch(10)
+    return brags_query.fetch(count)
     
-def getLocationBrags(location_id):
+def getLocationBrags(location_id, count):
     """Returns a list of Brags for a specific Category ordered by date desc.
     """    
     brags_query = models.Brag.all().filter('fb_location_id =', location_id)
     brags_query.order('-created')
-    return brags_query.fetch(10)    
+    return brags_query.fetch(count)    
 
 def getFBUser(fb_id=None):
     """Returns a User for the given fb_id.

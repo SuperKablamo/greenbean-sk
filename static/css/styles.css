@@ -12,15 +12,17 @@ table { border-collapse: collapse; border-spacing: 0; }
 /*TEXT STYLES*/
 body { font-family: Georgia,"Times New Roman",Times,serif; line-height: 1.4em; }
 a { color: #81290D; cursor: pointer; outline: medium none; text-decoration: none; }
-h1 { font-size: 22px; text-transform: uppercase; color: #4D7238; padding-bottom: 16px; }
+h1 { font-size: 22px; color: #4D7238; padding-bottom: 16px; }
 h1#error { font-size: 40px; color: red; }
 #fb-profile { font-size: 14px; text-align: right; }
 #brag-form h2 { color: #81290D; font-size: 16px; font-weight: normal; padding-bottom: 4px; }
 #tag-list label { white-space:nowrap; }
-h1#user-name, h1#category-name, h1#location-name { color: #4D7238; font-size: 20px; font-weight: normal; text-transform: uppercase; padding: 0px; }
-h1#category-name { font-size: 28px; }
-h1#location-name { font-size: 26px; }
-#mainbar .profile-name h2 { color: #81290D; font-size: 16px; font-weight: normal; text-transform: uppercase; }
+h1#user-name, h1#category-name, h1#location-name { color: #4D7238; font-weight: normal; padding: 0px; }
+h1#user-name span.name { font-size: 22px; }
+h1#location-name span.name { font-size: 26px; }
+h1#category-name span.name { font-size: 28px; text-transform: uppercase; }
+h1 span.type { font-size: 16px; text-transform: normal; }
+#mainbar .profile-name h2 { color: #81290D; font-size: 16px; font-weight: normal; text-transform: none; }
 #page h2 { color: #4D7238; font-size: 16px; font-weight: normal; padding: 12px 0 0 0; text-transform: uppercase; }
 .brag-vote a, .user-beans p { font-size: 12px; }
 .brag-entry .brag-message p, #sidebar p, #sidebar ul, p, #page ul { font-size: 16px; padding-top: 8px; color: #636363; }
@@ -119,7 +121,7 @@ input.share-button { padding: 4px 0 10px; float: right; }
 #start ul { list-style-image: url("../images/green-bullet.png"); margin-left: 20px;  }
 #start-button { width: 88px; height: 32px; margin: 10px 0 0 172px; clear: both; }
 #update p { text-align: right; padding: 0px 10px 0px 0px; }
-
+img.arrow { padding: 0 0 0 8px; vertical-align: middle; }
 
 /*FOOTER*/
 #footer {  }
