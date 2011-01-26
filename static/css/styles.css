@@ -130,3 +130,4 @@ img.arrow { padding: 0 0 0 8px; vertical-align: middle; }
 #bottom-nav { float: left; margin: 6px 0px 0px 24px; }
 #bottom-nav li { display: inline; color: #636363; font-size: 16px; padding-right: 16px; }
 #credit { float: right; margin: 0px 24px 10px 0; }
+#credit img { vertical-align: middle; }
