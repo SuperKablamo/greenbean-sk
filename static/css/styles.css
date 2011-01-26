@@ -84,6 +84,7 @@ h1 span.beans { font-size: 26px; -moz-border-radius: 20px; border: solid 0px #68
 .brag-user-profile .profile-image { float: left; }
 .brag-user-profile .profile-image img { width: 35px; height: 35px; border: solid #c3c7bd 2px; }
 .brag-user-profile .profile-name { float: left; margin: 0 0 0 12px; }
+.brag-user-profile .profile-name h2 { margin: 4px 0 0 0; }
 .brag-user-profile .profile-name  span.beans { font-size: 16px; -moz-border-radius: 20px; border: solid 0px #688b54; background-color: #81290D; color: white; margin-left: 8px; padding: 2px 8px 2px 8px; }
 
 

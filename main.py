@@ -125,7 +125,6 @@ class UserProfile(MainHandler):
         
         self.generate(template, {
                       'host': self.request.host_url, 
-                      'beans': getUserBeans(profile_user, self),    
                       'brags': brags,
                       'profile_user': profile_user,
                       'categories': CATS,
@@ -348,7 +347,7 @@ def getFBUser(fb_id=None):
     return user
 
 def getLeaders():
-    leaders_query = models.UserBeans.all().order('-beans')
+    leaders_query = models.User.all().order('-beans')
     return leaders_query.fetch(10)    
         
 def getCategoryLeaders():
@@ -363,27 +362,20 @@ def getRecentBrags(count):
     brags_query = models.Brag.all().order('-created')
     return brags_query.fetch(count)    
 
-def getUserBeans(user, self):
-    try:
-        user_beans = models.UserBeans.get_by_key_name(user.fb_id)
-    except:
-        self.generate(ERROR_PAGE, {'current_user': self.current_user,
-                                   'facebook_app_id':FACEBOOK_APP_ID})
-    if user_beans:
-        return user_beans.beans
-    else:
-        return 0
-
 def shareOnFacebook(self, user, brag):
-    #message = brag.message + categories + link to vote
-    message = brag.message
+    categories = []
+    categories.append("  Categories: ")
+    for c in brag.categories:
+        categories.append("#"+c+"  ")
+    message = brag.message + ''.join(categories) 
+    #message = brag.message
     attachment = {}
-    #attachment['caption'] = "Caption goes here"
+    attachment['caption'] = "How are you helping the planet?"
     attachment['name'] = "Go Green!"
-    attachment['link'] = self.request.host_url +"/facebook/user/" + user.fb_id
-    attachment['description'] = "Earn points for going green.  See how you and your community stack as stewards of the planet."
+    attachment['link'] = FACEBOOK_URL+SITE+"/facebook/user/"+user.fb_id
+    attachment['description'] = "Earn points for going green.  See how you and your community measure up as stewards of the planet."
     attachment['picture'] = "http://willmerydith.storage.s3.amazonaws.com/avatars/facebook-wall-logo.png"
-    vote_link = "/vote/"+str(brag.key)+"/"+str(user.fb_id)
+    vote_link = FACEBOOK_URL+SITE+"/facebook/user/"+str(user.fb_id)
     actions = {"name": "Vote for this.", "link": vote_link}
     attachment['actions'] = actions
     results = facebook.GraphAPI(

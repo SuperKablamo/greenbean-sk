@@ -29,12 +29,6 @@ class Brag(db.Model):
     fb_location_name = db.StringProperty(required=False)
     created = db.DateTimeProperty(auto_now_add=True)
 
-# These are the total Beans awarded to all the Brags of a specific User.
-class UserBeans(db.Model): # user.fb_id is the key
-    user = db.ReferenceProperty(User, required=True)
-    beans = db.IntegerProperty(required=True, default=0)
-    updated = db.DateTimeProperty(auto_now=True)
-
 # These are the total Beans awarded to all the Brags associated to a specific
 # Category.
 class CategoryBeans(db.Model): # key_name is name

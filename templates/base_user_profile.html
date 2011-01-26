@@ -13,7 +13,7 @@
       <div class="profile-name">
       	<h1 id="user-name">
 					<span class="name">{{ profile_user.name|escape }} </span>
-					<span class="beans">{{beans}}</span>
+					<span class="beans">{{profile_user.beans}}</span>
 				</h1>
       </div>
     </div><!-- /user-profile -->
@@ -109,9 +109,9 @@
         </div>
 				<div class="leader-box-content">
 					<ul>
-					{% for x in leaders %}
-        		<li>{{x.beans}} -- <a href="/user/{{x.user.fb_id}}">{{x.user.name}}</a></li>
-					{% endfor %}
+						{% for x in leaders %}
+	        		<li>{{x.beans}} -- <a href="/user/{{x.fb_id}}">{{x.name}}</a></li>
+						{% endfor %}
       		</ul>
 				</div>
       </div><!-- /leaders -->

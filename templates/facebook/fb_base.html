@@ -149,9 +149,9 @@
 						        </div>
 										<div class="leader-box-content">
 											<ul>
-											{% for x in leaders %}
-						        		<li>{{x.beans}} -- <a href="/facebook/user/{{x.user.fb_id}}">{{x.user.name}}</a></li>
-											{% endfor %}
+												{% for x in leaders %}
+							        		<li>{{x.beans}} -- <a href="/facebook/user/{{x.fb_id}}">{{x.name}}</a></li>
+												{% endfor %}
 						      		</ul>
 										</div>
 						      </div><!-- /leaders -->
