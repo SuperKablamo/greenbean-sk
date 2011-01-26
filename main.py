@@ -97,6 +97,7 @@ class BaseHandler(MainHandler):
             brags = getRecentBrags(10)
             template = "base.html"  
         self.generate(template, {
+                      'host': self.request.host_url,        
                       'brags': brags,
                       'leaders': leaders,
                       'category_leaders': category_leaders,
@@ -123,6 +124,7 @@ class UserProfile(MainHandler):
             template = "base_user_profile.html"
         
         self.generate(template, {
+                      'host': self.request.host_url, 
                       'beans': getUserBeans(profile_user, self),    
                       'brags': brags,
                       'profile_user': profile_user,
@@ -149,19 +151,7 @@ class UserProfile(MainHandler):
                            fb_location_id=user.fb_location_id,
                            fb_location_name=user.fb_location_name)
         brag.put()
-        if share.upper() == 'TRUE':# Announce checkin on Facebook Wall
-            attachment = {}
-            caption = 'GreenBean is AWESOME. I am earning points by being Green!'
-            attachment['caption'] = caption
-            attachment['name'] = 'Play GreenBean'
-            attachment['link'] = 'http://apps.facebook.com/' + SITE + '/user?user=' + user.fb_id
-            attachment['description'] = 'Vote for my Bean!'
-            attachment['picture'] = 'http://greenbean.me/public/checkresizeimg.php?src=user_image/41388_679874743_5282_n.jpg&w=35&h=35&zc=1'
-            # take the 2 lines out below to just update the db - not facebook
-            # good for testing
-            results = facebook.GraphAPI(user.fb_access_token).put_wall_post(message, attachment)
-            status_id = str(results['id'])
-
+        if share.upper() == 'TRUE': shareOnFacebook(self, user, brag)
         self.redirect('/user/'+user_id)  
         return          
 
@@ -182,6 +172,7 @@ class CategoryProfile(MainHandler):
             template = "base_category_profile.html"
             
         self.generate(template, {
+                      'host': self.request.host_url, 
                       'category': category,    
                       'category_beans': category_beans,    
                       'brags': brags,
@@ -208,6 +199,7 @@ class LocationProfile(MainHandler):
             template = "base_location_profile.html"
             
         self.generate(template, {
+                      'host': self.request.host_url, 
                       'location_beans': location_beans,    
                       'brags': brags,
                       'leaders': leaders,
@@ -237,15 +229,9 @@ class Bean(MainHandler):
                 brag.voter_keys.append(voter_fb_id)
                 brag.beans += 1
                 brag.put()
-                # Update the BragBean
-                user_beans = models.UserBeans.get_by_key_name(votee_fb_id)
-                if user_beans is not None:
-                    user_beans.beans += 1
-                else:
-                    user_beans = models.UserBeans(user = votee_user,
-                                                  key_name = votee_fb_id,
-                                                  beans = 1)                                                  
-                user_beans.put()    
+                # Update the bean count for user
+                user.beans += 1
+                user.put()    
                 # Update the CategoryBeans  
                 for c in brag.categories:
                     cat_beans = models.CategoryBeans.get_by_key_name(c)
@@ -272,21 +258,26 @@ class Bean(MainHandler):
 
 class Page(MainHandler):
     """Returns content for a User Sign Up page.
-    """    
+    """   
     def get(self, page=None):
+        path = ""
+        if isFacebook(self.request.path):
+            path = "facebook/fb_"            
         if page == "signup":
-            template = "base_signup.html"
+            template = path+"base_signup.html"
         elif page == "about":
-            template = "base_about.html"    
+            template = path+"base_about.html"    
         elif page == "contact":
-            template = "base_contact.html"
+            template = path+"base_contact.html"
         elif page == "rewards":
-            template = "base_rewards.html"                           
+            template = path+"base_rewards.html"                           
         elif page == "terms":
-            template = "base_terms.html"        
+            template = path+"base_terms.html"        
         else:
-            template = "base_404.html"   
+            template = path+"base_404.html"   
+        logging.info("############### template ="+template+" ###############")    
         self.generate(template, {
+                      'host': self.request.host_url, 
                       'current_user':self.current_user,
                       'facebook_app_id':FACEBOOK_APP_ID})        
 
@@ -378,12 +369,27 @@ def getUserBeans(user, self):
     except:
         self.generate(ERROR_PAGE, {'current_user': self.current_user,
                                    'facebook_app_id':FACEBOOK_APP_ID})
-    #Sam - changed this from 'user' to 'user_beans' - it was throwing an error for me    
     if user_beans:
         return user_beans.beans
     else:
         return 0
 
+def shareOnFacebook(self, user, brag):
+    #message = brag.message + categories + link to vote
+    message = brag.message
+    attachment = {}
+    #attachment['caption'] = "Caption goes here"
+    attachment['name'] = "Go Green!"
+    attachment['link'] = self.request.host_url +"/facebook/user/" + user.fb_id
+    attachment['description'] = "Earn points for going green.  See how you and your community stack as stewards of the planet."
+    attachment['picture'] = "http://willmerydith.storage.s3.amazonaws.com/avatars/facebook-wall-logo.png"
+    vote_link = "/vote/"+str(brag.key)+"/"+str(user.fb_id)
+    actions = {"name": "Vote for this.", "link": vote_link}
+    attachment['actions'] = actions
+    results = facebook.GraphAPI(
+        user.access_token).put_wall_post(message, attachment)
+    return str(results['id'])
+    
 def isFacebook(path):
     """Returns True if request is from a Facebook iFrame, otherwise False.
     """
@@ -408,6 +414,7 @@ def main():
                                               (r'/user/(.*)', UserProfile),
                                               (r'/category/(.*)', CategoryProfile),  
                                               (r'/location/(.*)', LocationProfile),
+                                              (r'/facebook/page/(.*)', Page),
                                               (r'/facebook/user/(.*)', UserProfile),
                                               (r'/facebook/category/(.*)', CategoryProfile),  
                                               (r'/facebook/location/(.*)', LocationProfile), 

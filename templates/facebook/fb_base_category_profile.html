@@ -8,8 +8,8 @@
 
 		{% block top-content %}
 		<h1 id="category-name">
-			<span class="name">Category - {{category}} </span>
-			<span class="beans">{% if category_beans.beans %}{{category_beans.beans}}{% endif %}</span>
+			<span class="name">Category: {{category}} </span>
+			<span class="beans">{% if category_beans.beans %}{{category_beans.beans}}{% else %}0{% endif %}</span>
 		</h1>	
 		<p>Latest bean requests for those looking to Go Green in the category "{{category}}".</p>
     {% endblock %}
@@ -27,7 +27,7 @@
 	      	<div class="profile-name">
 	      		<h2>
 							<span class="name"><a href="/facebook/user/{{brag.user.fb_id}}">{{ brag.user.name|escape }}</a></span>
-							<!--<span class="beans-count"> ({{beans}})</span>-->
+							<span class="beans">{{brag.user.beans}}</span>
 						</h2>
 	      	</div>
     		</div>

@@ -8,7 +8,7 @@
 		{% block top-content %}
 		<h1 id="location-name">
 			<span class="name">{{location_beans.fb_name|escape}} </span>
-			<span class="beans">{% if location_beans.beans %} {{location_beans.beans}} {% endif %}</span>
+			<span class="beans">{{location_beans.beans}}</span>
 		</h1>
 		<p>Latest bean requests for those looking to Go Green in the community of "{{location_beans.fb_name|escape}}".</p>
     {% endblock %}
@@ -25,7 +25,7 @@
 	      	<div class="profile-name">
 	      		<h2>
 							<span class="name"><a href="/user/{{brag.user.fb_id}}">{{ brag.user.name|escape }}</a></span>
-							<!--<span class="beans-count"> ({{beans}})</span>-->
+							<span class="beans">{{brag.user.beans}}</span>
 						</h2>
 	      	</div>
     		</div>

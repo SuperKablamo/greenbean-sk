@@ -11,8 +11,7 @@ class User(db.Model):
     fb_location_id = db.StringProperty(required=False)
     fb_location_name = db.StringProperty(required=False)
     access_token = db.StringProperty(required=True)
-    #TODO: provide a common way to define places for Users of FB, Twitter . . .
-    #current_location = db.ReferenceProperty(Location, required=False) 
+    beans = db.IntegerProperty(required=True, default=0)
   
 # Brag is a status message posted by a User that is bragging about an 
 # accomplishment under one or more Categories.  Brags are limited to 140
@@ -56,20 +55,3 @@ class BragBeans(db.Model):
     brag = db.ReferenceProperty(Brag, required=True)	
     beans = db.IntegerProperty(required=True, default=0)
     updated = db.DateTimeProperty(auto_now=True)
-
-# Bean is a vote on a specific Brag.
-#class Bean(db.Model):
-#        brag = db.ReferenceProperty(Brag, required=True)	
-#        user = db.ReferenceProperty(User, required=True)
-#        created = db.DateTimeProperty(auto_now_add=True)
-
-
-#class Category(db.Model):
-#    name = db.StringProperty(required=True)
-  
-# Enforce Twitter's 140 character limit.
-#def check_length(string):
-#    if len(string) > 140:
-#        raise db.BadValueError('Status cannot be more than 140 characters')
-#    return string
-

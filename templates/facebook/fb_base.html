@@ -73,7 +73,7 @@
 						      		<div class="profile-name">
 						      			<h2>
 													<span class="name"><a href="/facebook/user/{{brag.user.fb_id}}">{{ brag.user.name|escape }}</a></span>
-													<!--<span class="beans-count"> ({{beans}})</span>-->
+													<span class="beans">{{brag.user.beans}}</span>
 												</h2>
 						      		</div>
 					    			</div>
@@ -200,13 +200,13 @@
 	        <div id="footer-content">
 						<div id="bottom-nav">
 							<ul>
-								<li><a href="/page/about">About</a></li>
+								<li><a href="/facebook/page/about">About</a></li>
 								<li>|</li>
-								<li><a href="/page/rewards">Rewards</a></li>
+								<li><a href="/facebook/page/rewards">Rewards</a></li>
 								<li>|</li>
-								<li><a href="/page/contact">Contact</a></li>							
+								<li><a href="/facebook/page/contact">Contact</a></li>							
 								<li>|</li>
-								<li><a href="/page/terms">Terms</a></li>							
+								<li><a href="{{host}}/page/terms">Terms</a></li>							
 							</ul>
 						</div>
 	        	<div id="credit"><a href="http://code.google.com/appengine/"><img src="/static/images/appengine-silver-120x30.gif"/></a></div>
@@ -224,7 +224,6 @@
         FB.Event.subscribe('{% if current_user %}auth.logout{% else %}auth.login{% endif %}', function(response) {
           window.location.reload();
         });
-        //FB.Canvas.setAutoResize();
       };
       (function() {
         var e = document.createElement('script');

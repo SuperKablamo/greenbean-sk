@@ -18,9 +18,12 @@ h1#error { font-size: 40px; color: red; }
 #brag-form h2 { color: #81290D; font-size: 16px; font-weight: normal; padding-bottom: 4px; }
 #tag-list label { white-space:nowrap; }
 h1#user-name, h1#category-name, h1#location-name { color: #4D7238; font-size: 20px; font-weight: normal; text-transform: uppercase; padding: 0px; }
+h1#category-name { font-size: 28px; }
+h1#location-name { font-size: 26px; }
 #mainbar .profile-name h2 { color: #81290D; font-size: 16px; font-weight: normal; text-transform: uppercase; }
+#page h2 { color: #4D7238; font-size: 16px; font-weight: normal; padding: 12px 0 0 0; text-transform: uppercase; }
 .brag-vote a, .user-beans p { font-size: 12px; }
-.brag-entry .brag-message p, #sidebar p, #sidebar ul, p { font-size: 16px; padding-top: 8px; color: #636363; }
+.brag-entry .brag-message p, #sidebar p, #sidebar ul, p, #page ul { font-size: 16px; padding-top: 8px; color: #636363; }
 .brag-entry .brag-meta p, #sidebar p { text-align: left; font-size: 14px; padding-top: 8px; color: #636363; }
 .user-beans p { text-align: center; line-height: 1em; color: #636363; }
 #start h2 { color: #4D7238; font-size: 18px; font-weight: normal; padding-bottom: 4px; }
@@ -64,6 +67,7 @@ body { background-color: #eee9dc; }
 ul#signup { list-style: none inside; }
 ul#signup li { padding: 12px 0; }
 ul#signup .step { font-size: 26px; -moz-border-radius: 20px; border: solid 0px #688b54; background-color: #688b54; color: white; margin: 12px; padding: 2px 14px 8px 14px; }
+#page ul li { padding: 2px 0 0 8px; list-style: disc inside; }
 
 /*MAINBAR*/
 #mainbar { width: 386px; float: left; padding-right: 28px; }
@@ -80,6 +84,8 @@ h1 span.beans { font-size: 26px; -moz-border-radius: 20px; border: solid 0px #68
 .brag-user-profile .profile-image { float: left; }
 .brag-user-profile .profile-image img { width: 35px; height: 35px; border: solid #c3c7bd 2px; }
 .brag-user-profile .profile-name { float: left; margin: 0 0 0 12px; }
+.brag-user-profile .profile-name  span.beans { font-size: 16px; -moz-border-radius: 20px; border: solid 0px #688b54; background-color: #81290D; color: white; margin-left: 8px; padding: 2px 8px 2px 8px; }
+
 
 #brag-form { margin: 6px 0 18px 0; float: left; clear: both; }
 
