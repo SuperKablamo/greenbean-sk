@@ -127,7 +127,7 @@ img.arrow { padding: 0 0 0 8px; vertical-align: middle; }
 /*FOOTER*/
 #footer {  }
 #content-bottom { background: url("../images/content-bottom.png") no-repeat scroll center top transparent; width: 720px; height: 28px; float: left; }
-#footer-content { height: 28px; }
+#footer-content { height: 28px; clear: both; }
 #bottom-nav { float: left; margin: 6px 0px 0px 24px; }
 #bottom-nav li { display: inline; color: #636363; font-size: 16px; padding-right: 16px; }
 #credit { float: right; margin: 0px 24px 10px 0; }
