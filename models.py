@@ -26,6 +26,7 @@ class Brag(db.Model):
     origin = db.StringProperty(required=True)
     user = db.ReferenceProperty(User, required=True)
     categories = db.StringListProperty(db.StringProperty)
+    category_beans = db.ListProperty(db.Key, required=True, default=None)
     beans = db.IntegerProperty(required=True, default=0)
     voter_keys = db.StringListProperty(db.StringProperty)
     fb_location_id = db.StringProperty(required=False)
@@ -34,21 +35,25 @@ class Brag(db.Model):
 
 # These are the total Beans awarded to all the Brags associated to a specific
 # Category.
-class CategoryBeans(db.Model): # key_name is name
+class CategoryBean(db.Model): # key_name is name
     name = db.StringProperty(required=True)
     beans = db.IntegerProperty(required=True, default=0)
     updated = db.DateTimeProperty(auto_now=True)
+    
+    @property
+    def brags(self):
+        return Brag.all().filter('category_beans', self.key())
 
 # Thease are all the Beans awarded to all the Brags associated to a specific
 # Location.
-class LocationBeans(db.Model): # key_name is fb_location_id
+class LocationBean(db.Model): # key_name is fb_location_id
     fb_id = db.StringProperty(required=True)
     fb_name = db.StringProperty(required=True)
     beans = db.IntegerProperty(required=True, default=0)
     updated = db.DateTimeProperty(auto_now=True)
 
 # These are the total Beans awarded to each Brag.
-class BragBeans(db.Model):
+class BragBean(db.Model):
     brag = db.ReferenceProperty(Brag, required=True)	
     beans = db.IntegerProperty(required=True, default=0)
     updated = db.DateTimeProperty(auto_now=True)

@@ -15,12 +15,12 @@ handlers:
   static_files: static/favicon.ico
   upload: static/favicon.ico
 
-- url: /.*
-  script: main.py
-
 - url: /robots.txt
   static_files: static/robots.txt
   upload: static/robots.txt
+
+- url: /.*
+  script: main.py
   
 error_handlers:
   - file: templates/base_404.html

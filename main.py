@@ -144,9 +144,14 @@ class UserProfile(MainHandler):
         message = self.request.get('message')
         origin = self.request.get('origin')
         categories = self.request.get_all('category')
+        category_beans = []
+        for c in categories:
+            key = db.Key.from_path('CategoryBean', c)
+            category_beans.append(key)
         share = self.request.get('facebook')        
         brag = models.Brag(user = user,
                            categories = categories,
+                           category_beans = category_beans,
                            message = message,
                            origin = origin,
                            fb_location_id=user.fb_location_id,
@@ -162,7 +167,7 @@ class CategoryProfile(MainHandler):
     def get(self, category=None):
         logging.info('################ CategoryProfile::get ################')
         user = self.current_user # this is the logged in User
-        category_beans = models.CategoryBeans.get_by_key_name(category)
+        category_beans = models.CategoryBean.get_by_key_name(category)
         category_leaders = getCategoryLeaders()
         location_leaders = getLocationLeaders()
         leaders = getLeaders()        
@@ -192,7 +197,7 @@ class LocationProfile(MainHandler):
         logging.info('################ LocationProfile::get ################')
         user = self.current_user # this is the logged in User
 
-        location_beans = models.LocationBeans.get_by_key_name(location_id)
+        location_beans = models.LocationBean.get_by_key_name(location_id)
         category_leaders = getCategoryLeaders()
         location_leaders = getLocationLeaders()
         leaders = getLeaders()        
@@ -222,44 +227,13 @@ class Bean(MainHandler):
         logging.info('################ Bean::post ##########################') 
         brag_key = self.request.get('brag') 
         voter_fb_id = self.request.get('voter')
-        if isSpam(voter_fb_id): # Don't count any fake ids
-            return
         votee_fb_id = self.request.get('votee')
-        votee_user = getFBUser(fb_id=votee_fb_id) # the profiled User
-        # Update Brag
-        brag = models.Brag.get(brag_key)
-        if brag is not None:
-            if voter_fb_id not in brag.voter_keys:
-                # This is a valid vote, so start updating Entities 
-                # Update the Brag ...
-                brag.voter_keys.append(voter_fb_id)
-                brag.beans += 1
-                brag.put()
-                # Update the bean count for owner of the Brag getting a vote
-                votee_user.beans += 1
-                votee_user.put()    
-                # Update the CategoryBeans  
-                for c in brag.categories:
-                    cat_beans = models.CategoryBeans.get_by_key_name(c)
-                    if cat_beans is not None:
-                        cat_beans.beans += 1
-                    else:
-                        cat_beans = models.CategoryBeans(key_name = c,
-                                                         name = c,    
-                                                         beans = 1)
-                    cat_beans.put()
-                # Update the LocationBeans  
-                loc_name = brag.fb_location_name
-                loc_id = brag.fb_location_id
-                loc_beans = models.LocationBeans.get_by_key_name(loc_id)
-                if loc_beans is not None:
-                    loc_beans.beans += 1
-                else:
-                    loc_beans = models.LocationBeans(key_name = loc_id,
-                                                     fb_id = loc_id,
-                                                     fb_name = loc_name,    
-                                                     beans = 1)
-                loc_beans.put()    
+        voter = getFBUser(voter_fb_id)
+        if voter.name is None: # Don't count any fake ids
+            return
+        votee = getFBUser(fb_id=votee_fb_id) # the profiled User   
+        brag = models.Brag.get(brag_key)     
+        awardBean(brag, voter, votee)    
         return
 
 class Page(MainHandler):
@@ -313,10 +287,10 @@ def getUser(graph, cookie):
     user.put() 
     # Users need LocationBean records
     if user.fb_location_id is not None:
-        location_beans = models.LocationBeans.get_by_key_name(
+        location_beans = models.LocationBean.get_by_key_name(
                                                         user.fb_location_id)
         if location_beans is None:
-            location_beans = models.LocationBeans(
+            location_beans = models.LocationBean(
                                             key_name = user.fb_location_id,
                                             fb_id = user.fb_location_id,
                                             fb_name = user.fb_location_name,
@@ -363,11 +337,11 @@ def getLeaders():
     return leaders_query.fetch(10)    
         
 def getCategoryLeaders():
-    category_leaders_query = models.CategoryBeans.all().order('-beans')
+    category_leaders_query = models.CategoryBean.all().order('-beans')
     return category_leaders_query.fetch(10)
     
 def getLocationLeaders():
-    location_leaders_query = models.LocationBeans.all().order('-beans')
+    location_leaders_query = models.LocationBean.all().order('-beans')
     return location_leaders_query.fetch(10)         
 
 def shareOnFacebook(self, user, brag):
@@ -400,12 +374,43 @@ def isFacebook(path):
         logging.info("############### facebook NOT detected! ###########")        
         return False      
 
-def isSpam(user_fb_id):
-    user = models.User.get_by_key_name(user_fb_id)
-    if user.name is not None: # User's w/out name have bypassed Facebook login
-        return False
-    else:
-        return True
+def awardBean(brag, voter, votee):
+    """Updates bean count for a Brag and associated Entities.
+    """
+    # Update Brag
+    if brag is not None:
+        if voter.fb_id not in brag.voter_keys:
+            # This is a valid vote, so start updating Entities 
+            # Update the Brag ...
+            brag.voter_keys.append(voter.fb_id)
+            brag.beans += 1
+            brag.put()
+            # Update the bean count for owner of the Brag getting a vote
+            votee.beans += 1
+            votee.put()    
+            # Update the CategoryBeans  
+            for c in brag.categories:
+                cat_beans = models.CategoryBean.get_by_key_name(c)
+                if cat_beans is not None:
+                    cat_beans.beans += 1
+                else:
+                    cat_beans = models.CategoryBean(key_name = c,
+                                                    name = c,    
+                                                    beans = 1)
+                cat_beans.put()
+            # Update the LocationBeans  
+            loc_name = brag.fb_location_name
+            loc_id = brag.fb_location_id
+            loc_beans = models.LocationBean.get_by_key_name(loc_id)
+            if loc_beans is not None:
+                loc_beans.beans += 1
+            else:
+                loc_beans = models.LocationBean(key_name = loc_id,
+                                                fb_id = loc_id,
+                                                fb_name = loc_name,    
+                                                beans = 1)
+            loc_beans.put()    
+    return     
         
 ##############################################################################
 ############################################################################## 
