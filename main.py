@@ -311,13 +311,6 @@ def getUser(graph, cookie):
                        access_token=cookie["access_token"])
                        
     user.put() 
-    # Users need UserBean records ...
-    user_beans = models.UserBeans.get_by_key_name(user.fb_id)
-    if user_beans is None:
-        user_beans = models.UserBeans(user = user,
-                                      key_name = user.fb_id,
-                                      beans = 0)
-        user_beans.put()  
     # Users need LocationBean records
     if user.fb_location_id is not None:
         location_beans = models.LocationBeans.get_by_key_name(
