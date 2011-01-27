@@ -218,7 +218,7 @@ class LocationProfile(MainHandler):
         logging.info('################ LocationProfile::get ################')
         user = self.current_user # this is the logged in User
 
-        location_beans = models.LocationBean.get_by_key_name(location_id)
+        location_bean = models.LocationBean.get_by_key_name(location_id)
         category_leaders = getCategoryLeaders()
         location_leaders = getLocationLeaders()
         leaders = getLeaders()        
@@ -232,7 +232,7 @@ class LocationProfile(MainHandler):
         deref_brags = getLocationBrags(location_id, count)    
         self.generate(template, {
                       'host': self.request.host_url, 
-                      'location_beans': location_beans,    
+                      'location_bean': location_bean,    
                       'brags': deref_brags,
                       'leaders': leaders,
                       'category_leaders': category_leaders,

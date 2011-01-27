@@ -1,16 +1,20 @@
 {% extends "base.html" %}
 
-	{% block title %}{{location_beans.fb_name|escape}} is going green - Greenbean{% endblock %}
+	{% block title %}{{location_bean.fb_name|escape}} is going green - Greenbean{% endblock %}
 	
 	{% block main %}	
 	<!-- MAINBAR --> 
 	<div id="mainbar">
 		{% block top-content %}
 		<h1 id="location-name">
-			<span class="name">{{location_beans.fb_name|escape}} </span>
-			<span class="beans">{{location_beans.beans}}</span>
+			<span class="name">{{location_bean.fb_name|escape}} </span>
+			<span class="beans">{{location_bean.beans}}</span>
 		</h1>
-		<p>Latest bean requests for those looking to Go Green in the community of "{{location_beans.fb_name|escape}}".</p>
+		<div id="tagline">
+			<p>Latest bean requests for those looking to Go Green in the community of "{{location_bean.fb_name|escape}}".<span><script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
+			<fb:like href="http://{{host}}/location/{{location_bean.fb_id}}" layout="button_count" show_faces="false" width="100" font="arial"></fb:like>
+			</span></p>
+		</div>
     {% endblock %}
 
 		<!-- brag-list: container for list of Brags. --> 

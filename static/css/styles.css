@@ -78,6 +78,9 @@ ul#signup .step { font-size: 26px; -moz-border-radius: 20px; border: solid 0px #
 /*MAINBAR*/
 #mainbar { width: 386px; float: left; padding-right: 28px; }
 h1 span.beans { font-size: 26px; -moz-border-radius: 20px; border: solid 0px #688b54; background-color: #81290D; color: white; margin-left: 8px; padding: 4px 12px 4px 12px; }
+#facebook-like { float: right; margin-top: 2px; }
+#tagline { float: left; margin: 6px 0 12px 0; }
+#tagline span { margin: 0 0 0 4px; }
 .user-profile { height: 60px; }
 .user-profile .profile-image { float: left; }
 .user-profile .profile-image img { border: solid #c3c7bd 2px; }

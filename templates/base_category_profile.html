@@ -11,8 +11,13 @@
 			<span class="type">Category:&nbsp;</span> <span class="name">{{category}} </span>
 			<span class="beans">{% if category_beans.beans %}{{category_beans.beans}}{% else %}0{% endif %}</span>
 		</h1>	
-		<p>Latest bean requests for those looking to Go Green in the category "{{category}}".</p>
-    {% endblock %}
+		<div id="tagline">
+			<p>Latest bean requests for those looking to Go Green in the category "{{category}}".<span><script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
+			<fb:like href="http://{{host}}/category/{{category}}" layout="button_count" show_faces="false" width="100" font="arial"></fb:like>
+			</span></p>
+    </div>
+
+		{% endblock %}
 
 		{% block brags %}
     <!-- brag-list: container for list of Brags. --> 
