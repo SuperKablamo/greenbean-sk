@@ -1,3 +1,6 @@
+#
+# Copyright 2011 SuperKablamo, LLC
+#
 from google.appengine.ext import db
 
 # User needs to accomodate both FB, Twitter and Google.  Not sure if this is 

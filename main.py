@@ -1,5 +1,5 @@
 #
-# Copyright 2010 SuperKablamo, LLC
+# Copyright 2011 SuperKablamo, LLC
 # info@superkablamo.com
 #
 ############################# IMPORTS ########################################
@@ -18,6 +18,7 @@ import wsgiref.handlers
 import models
 import facebook
 import re
+import utils
 
 from settings import *
 from django.utils import simplejson as json
@@ -91,14 +92,15 @@ class BaseHandler(MainHandler):
         location_leaders = getLocationLeaders()
         leaders = getLeaders() 
         if isFacebook(self.request.path):
-            brags = getRecentBrags(4)
+            count = 4
             template = "facebook/fb_base.html"            
         else:    
-            brags = getRecentBrags(10)
+            count = 10
             template = "base.html"  
+        deref_brags = getRecentBrags(count)
         self.generate(template, {
                       'host': self.request.host_url,        
-                      'brags': brags,
+                      'brags': deref_brags,
                       'leaders': leaders,
                       'category_leaders': category_leaders,
                       'location_leaders': location_leaders,        
@@ -165,17 +167,18 @@ class CategoryProfile(MainHandler):
         location_leaders = getLocationLeaders()
         leaders = getLeaders()        
         if isFacebook(self.request.path):
-            brags = getCategoryBrags(category, 4)
+            count = 4
             template = "facebook/fb_base_category_profile.html"            
         else:    
-            brags = getCategoryBrags(category, 10)            
+            count = 10
             template = "base_category_profile.html"
-            
+
+        deref_brags = getCategoryBrags(category, count)   
         self.generate(template, {
                       'host': self.request.host_url, 
                       'category': category,    
                       'category_beans': category_beans,    
-                      'brags': brags,
+                      'brags': deref_brags,
                       'leaders': leaders,
                       'category_leaders': category_leaders,
                       'location_leaders': location_leaders,
@@ -194,16 +197,17 @@ class LocationProfile(MainHandler):
         location_leaders = getLocationLeaders()
         leaders = getLeaders()        
         if isFacebook(self.request.path):
-            brags = getLocationBrags(location_id, 4)
+            count = 4
             template = "facebook/fb_base_location_profile.html"            
         else:    
-            brags = getLocationBrags(location_id, 10)
+            count = 10
             template = "base_location_profile.html"
             
+        deref_brags = getLocationBrags(location_id, count)    
         self.generate(template, {
                       'host': self.request.host_url, 
                       'location_beans': location_beans,    
-                      'brags': brags,
+                      'brags': deref_brags,
                       'leaders': leaders,
                       'category_leaders': category_leaders,
                       'location_leaders': location_leaders,
@@ -328,18 +332,29 @@ def getUser(graph, cookie):
     return user
 
 def getCategoryBrags(category, count):
-    """Returns a list of Brags for a specific Category ordered by date desc.
+    """Returns a list of *derefrenced* Brags for a specific Category ordered 
+    by date desc.
     """
     brags_query = models.Brag.all().filter('categories =', category)
     brags_query.order('-created')
-    return brags_query.fetch(count)
+    brags = brags_query.fetch(count)
+    return utils.prefetch_refprops(brags, models.Brag.user)   
     
 def getLocationBrags(location_id, count):
-    """Returns a list of Brags for a specific Category ordered by date desc.
+    """Returns a list of *derefrenced* Brags for a specific Category ordered 
+    by date desc.
     """    
     brags_query = models.Brag.all().filter('fb_location_id =', location_id)
     brags_query.order('-created')
-    return brags_query.fetch(count)    
+    brags = brags_query.fetch(count)
+    return utils.prefetch_refprops(brags, models.Brag.user) 
+
+def getRecentBrags(count):
+    """Returns a list of *derefrenced* Brags ordered by date desc.
+    """    
+    brags_query = models.Brag.all().order('-created')
+    brags = brags_query.fetch(count)
+    return utils.prefetch_refprops(brags, models.Brag.user)
 
 def getFBUser(fb_id=None):
     """Returns a User for the given fb_id.
@@ -360,10 +375,6 @@ def getCategoryLeaders():
 def getLocationLeaders():
     location_leaders_query = models.LocationBeans.all().order('-beans')
     return location_leaders_query.fetch(10)         
-
-def getRecentBrags(count):
-    brags_query = models.Brag.all().order('-created')
-    return brags_query.fetch(count)    
 
 def shareOnFacebook(self, user, brag):
     categories = []
