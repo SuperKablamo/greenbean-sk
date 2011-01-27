@@ -81,6 +81,27 @@ class MainHandler(webapp.RequestHandler):
                                                 template_values, 
                                                 debug=DEBUG))
 
+class Admin(MainHandler):
+    def get(self, pswd=None):
+        logging.info('################### Admin:: get() ####################')
+        logging.info('################### pswd =' +pswd+ ' #################')        
+        if pswd == "backyardchicken":
+            categories = models.CategoryBean.all().fetch(100)
+            template_values = {
+                'categories': categories,
+                'current_user': self.current_user,
+                'facebook_app_id': FACEBOOK_APP_ID
+            }  
+            self.generate('base_admin.html', template_values)
+        else: self.redirect(500)  
+
+    def post(self, method=None):
+        logging.info('################### Admin:: post() ###################')
+        logging.info('################### method =' +method+' ##############')
+        if method == "init-category-beans":
+            initCategoryBeans()
+        self.redirect('/admin/backyardchicken')  
+
 class BaseHandler(MainHandler):
     """Returns content for the home page.
     """
@@ -389,15 +410,12 @@ def awardBean(brag, voter, votee):
             votee.beans += 1
             votee.put()    
             # Update the CategoryBeans  
-            for c in brag.categories:
-                cat_beans = models.CategoryBean.get_by_key_name(c)
-                if cat_beans is not None:
-                    cat_beans.beans += 1
-                else:
-                    cat_beans = models.CategoryBean(key_name = c,
-                                                    name = c,    
-                                                    beans = 1)
-                cat_beans.put()
+            updated = []
+            category_beans = models.CategoryBean.get(brag.category_beans)
+            for c in category_beans:
+                c.beans += 1
+                updated.append(c)
+            db.put(updated)    
             # Update the LocationBeans  
             loc_name = brag.fb_location_name
             loc_id = brag.fb_location_id
@@ -411,6 +429,21 @@ def awardBean(brag, voter, votee):
                                                 beans = 1)
             loc_beans.put()    
     return     
+
+def initCategoryBeans():
+    """Seeds the datastore with CategoryBeans.
+    """
+    updated = []
+    for c in CATS:
+        key = db.Key.from_path('CategoryBean', c)
+        cb = models.CategoryBean.get(key)
+        if cb is None:
+            cb = models.CategoryBean(key_name = c,
+                                     name = c,
+                                     beans = 0)
+            updated.append(cb)
+    db.put(updated)                             
+    return                             
         
 ##############################################################################
 ############################################################################## 
@@ -425,6 +458,7 @@ def main():
                                               (r'/facebook/location/(.*)', LocationProfile), 
                                               ('/bean', Bean),
                                               ('/facebook/', BaseHandler),
+                                              (r'/admin/(.*)', Admin),
                                               ('/', BaseHandler)],
                                               debug=DEBUG))
 ##############################################################################

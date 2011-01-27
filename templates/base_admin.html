@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+	{% block title %}Greenbean.me{% endblock %}
+	
+	{% block main %}	
+	<!-- FULLBAR --> 
+	<div id="fullbar">
+		<h1>Admin</h1>
+		<div class="admin-block">
+			<h2>Init Category Beans</h2>
+			<form action="/admin/init-category-beans" method="POST">
+					<label>Badges</label><input type="submit" name="create" value="Submit">
+			</form>	
+		</div>
+		<div id="category-list">
+		{% for c in categories %}
+			<div class="category">
+				<h3>Name: {{c.name}}</h3>
+				<p>Key Name: {{c.key_name }}</p>
+				<p>Beans: {{c.beans}}</p>
+			</div>			
+		{% endfor %}
+		</div>			
+                         
+  </div><!-- /fullbar -->
+	{% endblock %}	
+	{% block sidebar %}	
+	{% endblock %}
