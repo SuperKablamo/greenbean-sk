@@ -22,10 +22,10 @@ h1#user-name span.name { font-size: 22px; }
 h1#location-name span.name { font-size: 26px; }
 h1#category-name span.name { font-size: 28px; text-transform: uppercase; }
 h1 span.type { font-size: 16px; text-transform: normal; }
-#mainbar .profile-name h2 { color: #81290D; font-size: 16px; font-weight: normal; text-transform: none; }
+#mainbar .profile-name h2, .admin-block h2 { color: #81290D; font-size: 16px; font-weight: normal; text-transform: none; }
 #page h2 { color: #4D7238; font-size: 16px; font-weight: normal; padding: 12px 0 0 0; text-transform: uppercase; }
 .brag-vote a, .user-beans p { font-size: 12px; }
-.brag-entry .brag-message p, #sidebar p, #sidebar ul, p, #page ul { font-size: 16px; padding-top: 8px; color: #636363; }
+.brag-entry .brag-message p, #sidebar p, #sidebar ul, p, #page ul, .admin-block { font-size: 16px; padding-top: 8px; color: #636363; }
 .brag-entry .brag-meta p, #sidebar p { text-align: left; font-size: 14px; padding-top: 8px; color: #636363; }
 .user-beans p { text-align: center; line-height: 1em; color: #636363; }
 #start h2 { color: #4D7238; font-size: 18px; font-weight: normal; padding-bottom: 4px; }
@@ -72,6 +72,9 @@ ul#signup .step { font-size: 26px; -moz-border-radius: 20px; border: solid 0px #
 #page ul li { padding: 2px 0 0 8px; list-style: disc inside; }
 #fb-login-center { margin: 20px 0 0 40px; width: 400px; }
 
+.admin-block { margin: 10px 0 12px 12px; padding: 10px; border: 2px solid #5e7e4c; }
+.admin-block ul { margin: 0 0 0 12px; }
+
 /*MAINBAR*/
 #mainbar { width: 386px; float: left; padding-right: 28px; }
 h1 span.beans { font-size: 26px; -moz-border-radius: 20px; border: solid 0px #688b54; background-color: #81290D; color: white; margin-left: 8px; padding: 4px 12px 4px 12px; }
@@ -90,7 +93,6 @@ h1 span.beans { font-size: 26px; -moz-border-radius: 20px; border: solid 0px #68
 .brag-user-profile .profile-name h2 { margin: 4px 0 0 0; }
 .brag-user-profile .profile-name  span.beans { font-size: 16px; -moz-border-radius: 20px; border: solid 0px #688b54; background-color: #81290D; color: white; margin-left: 8px; padding: 2px 8px 2px 8px; }
 
-
 #brag-form { margin: 6px 0 18px 0; float: left; clear: both; }
 
 #text-box .text-area { border: 1px solid #c3c7bd; }
@@ -103,15 +105,13 @@ input.share-button { padding: 4px 0 10px; float: right; }
 
 #brag-list { margin: 20px 0; clear:both; overflow: hidden; }
 .brag-wrap { clear: both; }
-.brag-wrap .brag-entry { background: url("../images/entry-separator.png") no-repeat scroll left bottom transparent; padding: 0 0 10px 0; margin-bottom: 10px; }
+.brag-wrap .brag-entry, .admin-block ul { background: url("../images/entry-separator.png") no-repeat scroll left bottom transparent; padding: 0 0 10px 0; margin-bottom: 10px; }
 .brag-entry { float: left; overflow: hidden; padding: 10px 0; width: 100%; background: url("../images/entry-separator.png") no-repeat scroll left top transparent; }
 
 .brag-vote { text-align: center; float: right; margin-bottom: 6px; }
 .vote-button { background-color: transparent; text-decoration: underline; border: none; cursor: pointer; padding: 0; }
 
 .vote-count { font-size: 20px; -moz-border-radius: 20px; border: solid 0px #688b54; background-color: #688b54; color: white; margin-top: 4px; padding: 4px 10px 4px 10px; }
-
-
 
 /*SIDEBAR*/
 #sidebar { width: 260px; float: left; }

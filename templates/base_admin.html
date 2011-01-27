@@ -9,17 +9,20 @@
 		<div class="admin-block">
 			<h2>Init Category Beans</h2>
 			<form action="/admin/init-category-beans" method="POST">
-					<label>Badges</label><input type="submit" name="create" value="Submit">
+					<input type="submit" name="create" value="Submit">
 			</form>	
 		</div>
-		<div id="category-list">
-		{% for c in categories %}
-			<div class="category">
-				<h3>Name: {{c.name}}</h3>
-				<p>Key Name: {{c.key_name }}</p>
-				<p>Beans: {{c.beans}}</p>
-			</div>			
-		{% endfor %}
+		<div class="admin-block">
+			<div id="category-list">
+				<h2>Category Beans</h2>
+				{% for c in categories %}
+				<ul>
+					<li>Name: {{c.name}}</li>
+					<li>Key Name: {{c.key_name }}</li>
+					<li>Beans: {{c.beans}}</li>
+				</ul>			
+				{% endfor %}
+			</div>
 		</div>			
                          
   </div><!-- /fullbar -->
