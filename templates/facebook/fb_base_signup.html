@@ -8,10 +8,20 @@
 		<h1>Sign Up With Your Facebook Account</h1>
 		<p>You need a Facebook account to play Greenbean.  Signing up with your Facebook account is easy:</p>
 		<ul id="signup">
-			<li><span class="step">1</span>Click the Facebook "login" button up top.</li>
+			<li><span class="step">1</span>Click the Facebook "login" button below.</li>
 			<li><span class="step">2</span>Allow Greenbean to sync with your Facebook account.</li>
-			<li><span class="step">3</span>Your name will appear up top, click to start playing.</li>
+			<li><span class="step">3</span>Your name will appear below, click it to start playing.</li>
 		</ul>	
+		<div id="fb-login-center">
+			<div id="fb-button">
+				<fb:login-button autologoutlink="true" perms="publish_checkins,publish_stream"></fb:login-button>
+			</div>
+  		{% if current_user %}
+    	<div id="fb-profile">
+				<p>Hello, <a href="/facebook/user/{{current_user.fb_id}}">{{current_user.name}}</a></p>
+			</div>
+  		{% endif %}
+		</div><!-- /fb-login -->		
 		<br/><br/><br/>
 		<p>Note about privacy: Greenbean will always give you the choice to publish status to your Facebook Page.</p>
 		

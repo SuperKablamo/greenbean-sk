@@ -70,6 +70,7 @@ ul#signup { list-style: none inside; }
 ul#signup li { padding: 12px 0; }
 ul#signup .step { font-size: 26px; -moz-border-radius: 20px; border: solid 0px #688b54; background-color: #688b54; color: white; margin: 12px; padding: 2px 14px 8px 14px; }
 #page ul li { padding: 2px 0 0 8px; list-style: disc inside; }
+#fb-login-center { margin: 20px 0 0 40px; width: 400px; }
 
 /*MAINBAR*/
 #mainbar { width: 386px; float: left; padding-right: 28px; }

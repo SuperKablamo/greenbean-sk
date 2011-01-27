@@ -347,7 +347,8 @@ def getRecentBrags(count):
     """    
     brags_query = models.Brag.all().order('-created')
     brags = brags_query.fetch(count)
-    return utils.prefetch_refprops(brags, models.Brag.user)
+    if brags: return utils.prefetch_refprops(brags, models.Brag.user)
+    else: return None
 
 def getFBUser(fb_id=None):
     """Returns a User for the given fb_id.
