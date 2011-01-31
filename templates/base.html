@@ -1,9 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:og="http://ogp.me/ns#"
+      xmlns:fb="http://www.facebook.com/2008/fbml">
+
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<meta name="description" content="Greenbean is a social game that ranks and rewards people for their efforts to live sustainably and save the planet.">
-    <title>{% block title %}Go Green, Earn Beans - Greenbean{% endblock %}</title>
+		<meta property="fb:app_id" content="{{facebook_app_id}}" />
+		{% block facebook_meta %}
+		<meta property="og:website" content="Greenbean.me"/>
+    <meta property="og:description" content="Greenbean is a social game that ranks and rewards people for their efforts to live sustainably and save the planet."/>
+		{% endblock %}		   
+		<title>{% block title %}Go Green, Earn Beans - Greenbean{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
     <script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
@@ -140,7 +148,7 @@
 												in <a href="/location/{{brag.fb_location_id}}">{{ brag.fb_location_name }}</a> 
 												{% endif %}
 				         				{% for c in brag.categories%}
-				           			<a href="/category/{{c}}">#{{c}} </a>
+				           			<a href="/category/{{c|slugify}}">#{{c}} </a>
 				           			{%endfor%}
 				         			</p>
 				       			</div>          
@@ -204,7 +212,7 @@
 									<div class="leader-box-content">
 					        	<ul>
 										{% for c in category_leaders %}
-					        		<li>{{c.beans}} -- <a href="/category/{{c.name}}">{{c.name}}</a></li>
+					        		<li>{{c.beans}} -- <a href="/category/{{c.slug}}">{{c.name}}</a></li>
 										{% endfor %}
 					      		</ul>
 									</div>

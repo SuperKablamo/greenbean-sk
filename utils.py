@@ -2,6 +2,7 @@
 # Copyright 2011 SuperKablamo, LLC
 #
 import logging
+import re
 from google.appengine.ext import db
 
 def strToInt(s):
@@ -24,3 +25,7 @@ def prefetch_refprops(entities, *props):
     for (entity, prop), ref_key in zip(fields, ref_keys):
         prop.__set__(entity, ref_entities[ref_key])
     return entities  
+    
+def slugify(value):
+    value = re.sub('[^\w\s-]', '', value).strip().lower()
+    return re.sub('[-\s]+', '-', value)    

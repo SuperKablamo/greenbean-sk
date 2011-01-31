@@ -102,7 +102,7 @@
 													in <a href="/facebook/location/{{brag.fb_location_id}}">{{ brag.fb_location_name }}</a> 
 													{% endif %}
 					         				{% for c in brag.categories%}
-					           			<a href="/facebook/category/{{c}}">#{{c}} </a>
+					           			<a href="/facebook/category/{{c|slugify}}">#{{c}} </a>
 					           			{%endfor%}
 					         			</p>
 					       			</div>          
@@ -166,7 +166,7 @@
 										<div class="leader-box-content">
 						        	<ul>
 											{% for c in category_leaders %}
-						        		<li>{{c.beans}} -- <a href="/facebook/category/{{c.name}}">{{c.name}}</a></li>
+						        		<li>{{c.beans}} -- <a href="/facebook/category/{{c.slug}}">{{c.name}}</a></li>
 											{% endfor %}
 						      		</ul>
 										</div>

@@ -167,7 +167,7 @@ class UserProfile(MainHandler):
         categories = self.request.get_all('category')
         category_beans = []
         for c in categories:
-            key = db.Key.from_path('CategoryBean', c)
+            key = db.Key.from_path('CategoryBean', utils.slugify(c))
             category_beans.append(key)
         share = self.request.get('facebook')        
         brag = models.Brag(user = user,
@@ -179,16 +179,20 @@ class UserProfile(MainHandler):
                            fb_location_name=user.fb_location_name)
         brag.put()
         if share.upper() == 'TRUE': shareOnFacebook(self, user, brag)
-        self.redirect('/user/'+user_id)  
-        return          
+        if isFacebook(self.request.path):
+            self.redirect('/facebook/user/'+user_id)            
+        else:    
+            self.redirect('/user/'+user_id)  
 
 class CategoryProfile(MainHandler):
     """Returns content for Category Profile pages.
     """    
-    def get(self, category=None):
+    def get(self, category_slug=None):
         logging.info('################ CategoryProfile::get ################')
         user = self.current_user # this is the logged in User
-        category_beans = models.CategoryBean.get_by_key_name(category)
+        logging.info('######### category_slug = '+category_slug+' ##########')
+        category_bean = models.CategoryBean.get_by_key_name(category_slug)
+        logging.info('###### category_bean = '+str(category_bean)+' ########')
         category_leaders = getCategoryLeaders()
         location_leaders = getLocationLeaders()
         leaders = getLeaders()        
@@ -198,12 +202,11 @@ class CategoryProfile(MainHandler):
         else:    
             count = 10
             template = "base_category_profile.html"
-
-        deref_brags = getCategoryBrags(category, count)   
+  
+        deref_brags = getCategoryBrags(category_bean, count) 
         self.generate(template, {
                       'host': self.request.host_url, 
-                      'category': category,    
-                      'category_beans': category_beans,    
+                      'category_bean': category_bean,    
                       'brags': deref_brags,
                       'leaders': leaders,
                       'category_leaders': category_leaders,
@@ -319,11 +322,11 @@ def getUser(graph, cookie):
             location_beans.put()           
     return user
 
-def getCategoryBrags(category, count):
+def getCategoryBrags(category_bean, count):
     """Returns a list of *derefrenced* Brags for a specific Category ordered 
     by date desc.
     """
-    brags_query = models.Brag.all().filter('categories =', category)
+    brags_query = models.Brag.all().filter('categories =', category_bean.name)
     brags_query.order('-created')
     brags = brags_query.fetch(count)
     return utils.prefetch_refprops(brags, models.Brag.user)   
@@ -398,6 +401,7 @@ def isFacebook(path):
 def awardBean(brag, voter, votee):
     """Updates bean count for a Brag and associated Entities.
     """
+    logging.info("###################### awardBean #########################")
     # Update Brag
     if brag is not None:
         if voter.fb_id not in brag.voter_keys:
@@ -412,7 +416,9 @@ def awardBean(brag, voter, votee):
             # Update the CategoryBeans  
             updated = []
             category_beans = models.CategoryBean.get(brag.category_beans)
+            logging.info("## len(category_beans) = "+str(len(category_beans))+" #")
             for c in category_beans:
+                logging.info("############ c.name = " +c.name+" ############")
                 c.beans += 1
                 updated.append(c)
             db.put(updated)    
@@ -438,9 +444,11 @@ def initCategoryBeans():
         key = db.Key.from_path('CategoryBean', c)
         cb = models.CategoryBean.get(key)
         if cb is None:
-            cb = models.CategoryBean(key_name = c,
+            cb = models.CategoryBean(key_name = CAT_SLUG[c],
                                      name = c,
-                                     beans = 0)
+                                     beans = 0,
+                                     description=CAT_DESC[c],
+                                     slug = CAT_SLUG[c])
             updated.append(cb)
     db.put(updated)                             
     return                             

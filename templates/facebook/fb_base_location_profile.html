@@ -53,7 +53,7 @@
 							in {{ brag.fb_location_name }} 
 						{% endif %}
            		{% for c in brag.categories%}
-            	<a href="/facebook/category/{{c}}">#{{c}} </a>
+            	<a href="/facebook/category/{{c|slugify}}">#{{c}} </a>
             	{%endfor%}
           	</p>
         	</div>          

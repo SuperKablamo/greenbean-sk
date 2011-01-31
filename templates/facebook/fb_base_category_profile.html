@@ -1,6 +1,6 @@
 {% extends "fb_base.html" %}
 
-	{% block title %}{{category|escape}}, a great way to save the planet - Greenbean{% endblock %}
+	{% block title %}{{category_bean.name}}, a great way to save the planet - Greenbean{% endblock %}
 	
 	{% block main %}	
 	<!-- MAINBAR --> 
@@ -8,10 +8,10 @@
 
 		{% block top-content %}
 		<h1 id="category-name">
-			<span class="type">Category:&nbsp;</span> <span class="name">{{category}} </span>
-			<span class="beans">{% if category_beans.beans %}{{category_beans.beans}}{% else %}0{% endif %}</span>
+			<span class="type">Category:&nbsp;</span> <span class="name">{{category_bean.name}} </span>
+			<span class="beans">{% if category_bean.beans %}{{category_bean.beans}}{% else %}0{% endif %}</span>
 		</h1>	
-		<p>Latest bean requests for those looking to Go Green in the category "{{category}}".</p>
+		<p>Latest bean requests for those looking to Go Green in the category "{{category_bean.name}}".</p>
     {% endblock %}
 
 		{% block brags %}
@@ -55,7 +55,7 @@
 							in <a href="/facebook/location/{{brag.fb_location_id}}">{{ brag.fb_location_name }}</a> 
 						{% endif %}
            		{% for c in brag.categories%}
-            	<a href="/facebook/category/{{c}}">#{{c}} </a>
+            	<a href="/facebook/category/{{c|slugify}}">#{{c}} </a>
             	{%endfor%}
           	</p>
         	</div>          

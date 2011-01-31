@@ -39,6 +39,8 @@ class CategoryBean(db.Model): # key_name is name
     name = db.StringProperty(required=True)
     beans = db.IntegerProperty(required=True, default=0)
     updated = db.DateTimeProperty(auto_now=True)
+    description = db.StringProperty(required=True, default="Greenbean is a social game that ranks and rewards people for their efforts to live sustainably and save the planet.")
+    slug = db.StringProperty(required=False)
     
     @property
     def brags(self):

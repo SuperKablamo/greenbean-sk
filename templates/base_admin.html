@@ -18,7 +18,9 @@
 				{% for c in categories %}
 				<ul>
 					<li>Name: {{c.name}}</li>
-					<li>Key Name: {{c.key_name }}</li>
+					<li>Slug: {{c.slug}}</li>
+					<li>Description: {{c.description}}</li>
+					<li>Key Name: {{c.key.name }}</li>
 					<li>Beans: {{c.beans}}</li>
 				</ul>			
 				{% endfor %}

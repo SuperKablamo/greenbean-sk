@@ -1,5 +1,8 @@
 {% extends "base.html" %}
-
+	{% block facebook_meta %}
+	<meta property="og:city" content="{{location_bean.fb_name|escape}}"/>
+  <meta property="og:description" content="Greenbean is a social game that ranks and rewards people for their efforts to live sustainably and save the planet."/>
+	{% endblock %}
 	{% block title %}{{location_bean.fb_name|escape}} is going green - Greenbean{% endblock %}
 	
 	{% block main %}	
@@ -11,9 +14,12 @@
 			<span class="beans">{{location_bean.beans}}</span>
 		</h1>
 		<div id="tagline">
-			<p>Latest bean requests for those looking to Go Green in the community of "{{location_bean.fb_name|escape}}".<span><script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
-			<fb:like href="http://{{host}}/location/{{location_bean.fb_id}}" layout="button_count" show_faces="false" width="100" font="arial"></fb:like>
-			</span></p>
+			<p>Latest bean requests for those looking to Go Green in the community of "{{location_bean.fb_name|escape}}".
+				<span style="text-align:right;">
+					<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
+					<fb:like href="{{host}}/location/{{location_bean.fb_id}}" layout="button_count" show_faces="false" width="100" font="arial"></fb:like>
+				</span>
+			</p>
 		</div>
     {% endblock %}
 
@@ -57,7 +63,7 @@
 							in {{ brag.fb_location_name }} 
 						{% endif %}
            		{% for c in brag.categories%}
-            	<a href="/category/{{c}}">#{{c}} </a>
+            	<a href="/category/{{c|slugify}}">#{{c}} </a>
             	{%endfor%}
           	</p>
         	</div>          
