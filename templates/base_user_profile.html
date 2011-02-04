@@ -21,9 +21,9 @@
 		{% ifequal current_user.fb_id profile_user.fb_id %}
     <div id="brag-form">
       <h2>Doing something Green? Share it and earn rewards.</h2> 
-   	  <form name="input" action="/user/{{profile_user.fb_id}}" method="post"> 
+   	  <form id="brag-post" name="input" action="/user/{{profile_user.fb_id}}" method="post"> 
       	<div id="text-box">
-  				<textarea class="text-area" id="message" name="message" rows="3" cols="46"></textarea>
+  				<textarea class="validate[required, maxSize[340]] text-input" id="message" name="message" rows="3" cols="46"></textarea>
         </div>
         <div id="tag-list">
         	<ul>
@@ -83,72 +83,3 @@
   </div><!-- /mainbar -->
 	{% endblock %}	
 
-	{% block sidebar%}
-  <!-- SIDEBAR --> 
-  <div id="sidebar">
-		{% if not current_user.fb_id %}
-  	<div class="side-block">
-			<div id="start">
-      	<h2>Go Green, Earn Beans!</h2>
-        <ul>
-        	<li><strong>Get ranked</strong> on your Green accomplishments.</li>
-        	<li><strong>Reward</strong> your friends' who are going green.</li>					
-          <li>Earn beans for you and your community and <strong>win prizes</strong>.</li>
-        </ul>
-        <div id="start-button">
-					<a href="/page/signup"><img src="/static/images/get-beans-button.png"/></a>
-				</div>
-      </div><!-- /start -->
-    </div><!-- /side-block -->
-		{% endif %}
-
-  	<div class="side-block">
-    	<div id="leaders" class="leader-box">
-				<div class="leader-box-header">
-      		<h2>Greenbean Leaders</h2>
-        </div>
-				<div class="leader-box-content">
-					<ul>
-						{% for x in leaders %}
-	        		<li>{{x.beans}} -- <a href="/user/{{x.fb_id}}">{{x.name}}</a></li>
-						{% endfor %}
-      		</ul>
-				</div>
-      </div><!-- /leaders -->
-    </div><!-- /side-block -->
-
-  	<div class="side-block">
-    	<div id="cat-leaders" class="leader-box">
-				<div class="leader-box-header">
-      		<h2>Top Categories</h2>
-				</div>
-				<div class="leader-box-content">
-        	<ul>
-					{% for c in category_leaders %}
-        		<li>{{c.beans}} -- <a href="/category/{{c.slug}}">{{c.name}}</a></li>
-					{% endfor %}
-      		</ul>
-				</div>
-      </div><!-- /cat-leaders -->
-    </div><!-- /side-block -->
-
-  	<div class="side-block">
-    	<div id="loc-leaders" class="leader-box">
-				<div class="leader-box-header">
-      		<h2>Top Locations</h2>
-				</div>
-				<div class="leader-box-content">
-        	<ul>
-					{% for l in location_leaders %}
-         		<li>{{l.beans}} -- <a href="/location/{{l.fb_id}}">{{l.fb_name}}</a></li>
- 					{% endfor %}
-        	</ul>
-				</div>	
-      </div><!-- /loc-leaders -->
-    </div><!-- /side-block -->
-
-		<div class="side-block">
-			<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/apps/application.php?id={{facebook_app_id}}" width="252" show_faces="true" stream="false" header="true"></fb:like-box>					  </div><!-- /sidebar -->						
-		</div><!-- /side-block -->
-  </div><!-- /sidebar -->						
-	{% endblock %}	

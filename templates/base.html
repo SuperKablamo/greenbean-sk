@@ -13,8 +13,12 @@
 		{% endblock %}		   
 		<title>{% block title %}Go Green, Earn Beans - Greenbean{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+		<link rel="stylesheet" href="/static/css/validationEngine.jquery.css" type="text/css"/>
     <script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+		<script src="/static/javascript/jquery.validationEngine-en.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/javascript/jquery.validationEngine.js" type="text/javascript" charset="utf-8"></script>
+
 		<script type="text/javascript">
 	  	$(function() {  
 	      $(".vote-form").submit(function() { 
@@ -36,6 +40,12 @@
 	    	});  
 	   	});
 		</script>
+    <script>
+        jQuery(document).ready(function(){
+            // binds form submission and fields to the validation engine
+            jQuery("#brag-post").validationEngine();
+        });
+    </script>		
 		<!--<script type="text/javascript">
 	  	$(function() {  
 	      $('.error').hide();  
@@ -182,11 +192,13 @@
 					      </div><!-- /start -->
 					    </div><!-- /side-block -->
 							{% else %}
+							  {% ifnotequal profile_user.fb_id current_user.fb_id %}
 					  	<div class="side-block">
 								<div id="update">
 					      	<p><span>Got Beans?<a href="/user/{{current_user.fb_id}}"> Update Your Status!</a></span><img class="arrow" src="/static/images/arrow.png"></p>
 					      </div><!-- /start -->
-					    </div><!-- /side-block -->							
+					    </div><!-- /side-block -->	
+								{% endifnotequal %}
 							{% endif %}
 
 					  	<div class="side-block">

@@ -10,8 +10,9 @@
 	<div id="mainbar">
 
 		{% block top-content %}
+		<div id="type">Category:&nbsp;</div>
 		<h1 id="category-name">
-			<span class="type">Category:&nbsp;</span> <span class="name">{{category_bean.name}} </span>
+			<span class="name">{{category_bean.name}} </span>
 			<span class="beans">{% if category_bean.beans %}{{category_bean.beans}}{% else %}0{% endif %}</span>
 		</h1>	
 		<div id="tagline">

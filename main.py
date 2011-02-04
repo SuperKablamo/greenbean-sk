@@ -22,6 +22,7 @@ import utils
 
 from settings import *
 from django.utils import simplejson as json
+from google.appengine.api import memcache
 from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
@@ -108,10 +109,28 @@ class BaseHandler(MainHandler):
     def get(self):
         # TODO: build lists of top users, categories and locations.
         logging.info("#############  BaseHandler:: get(self): ##############")
-        logging.info("############# self.request.path="+self.request.path+" ##############")        
-        category_leaders = getCategoryLeaders()
-        location_leaders = getLocationLeaders()
-        leaders = getLeaders() 
+        logging.info("###### self.request.path= "+self.request.path+" ######")        
+        category_leaders_cache = memcache.get(CAT_CACHE_ID) 
+        location_leaders_cache = memcache.get(LOC_CACHE_ID)
+        leaders_cache = memcache.get(LEAD_CACHE_ID)        
+        if category_leaders_cache is None:
+            category_leaders_cache = getCategoryLeaders()
+            success = memcache.set(key=CAT_CACHE_ID, 
+                                   value=category_leaders_cache, 
+                                   time=300)
+
+        if location_leaders_cache is None:   
+            location_leaders_cache = getLocationLeaders()
+            success = memcache.set(key=LOC_CACHE_ID, 
+                                   value=location_leaders_cache, 
+                                   time=300)
+                                               
+        if leaders_cache is None:                      
+            leaders_cache = getLeaders() 
+            success = memcache.set(key=LEAD_CACHE_ID, 
+                                   value=leaders_cache, 
+                                   time=300)   
+                                            
         if isFacebook(self.request.path):
             count = 4
             template = "facebook/fb_base.html"            
@@ -122,9 +141,9 @@ class BaseHandler(MainHandler):
         self.generate(template, {
                       'host': self.request.host_url,        
                       'brags': deref_brags,
-                      'leaders': leaders,
-                      'category_leaders': category_leaders,
-                      'location_leaders': location_leaders,        
+                      'leaders': leaders_cache,
+                      'category_leaders': category_leaders_cache,
+                      'location_leaders': location_leaders_cache,        
                       'current_user':self.current_user,
                       'facebook_app_id':FACEBOOK_APP_ID})
                    
@@ -357,14 +376,17 @@ def getFBUser(fb_id=None):
     return user
 
 def getLeaders():
+    memcache.delete(key=LEAD_CACHE_ID)    
     leaders_query = models.User.all().order('-beans')
     return leaders_query.fetch(10)    
         
 def getCategoryLeaders():
+    memcache.delete(key=CAT_CACHE_ID)
     category_leaders_query = models.CategoryBean.all().order('-beans')
     return category_leaders_query.fetch(10)
     
 def getLocationLeaders():
+    memcache.delete(key=LOC_CACHE_ID)
     location_leaders_query = models.LocationBean.all().order('-beans')
     return location_leaders_query.fetch(10)         
 
